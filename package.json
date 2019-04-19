@@ -1,0 +1,39 @@
+{
+  "name": "daedelus",
+  "version": "1.0.0",
+  "description": "Initiative for a dataless cx websdk",
+  "scripts": {
+    "mongod:init": "echo \"> mongo\n> use mainDB\n> db.createUser({user:\"api\", pwd:\"M4KgnR32\", roles:[{role:\"readWrite\", db:\"mainDB\"}]})\n> db.respondents.insertOne({satisfaction: 0, rage: 0, fidelity: 0})\"",
+    "mongod": "mongod --config mongodb/mongod.conf --auth",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/foreseecode/daedelus.git"
+  },
+  "keywords": [
+    "daedalus",
+    "dataless",
+    "sdk",
+    "websdk",
+    "privacy",
+    "hackathon",
+    "hackathon2019"
+  ],
+  "author": "Guillaume Peugniez",
+  "contributors": [
+    "Calvin Gerus <calvin.gerus@foresee.com>",
+    "Pablo Suarez <pablo97suarez@gmail.com>"
+  ],
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/foreseecode/daedelus/issues"
+  },
+  "homepage": "https://github.com/foreseecode/daedelus#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "chalk": "^2.4.2",
+    "express": "^4.16.4",
+    "mongodb": "^3.2.3"
+  }
+}
