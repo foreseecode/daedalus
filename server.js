@@ -16,8 +16,36 @@ mongoClient.init();
 app.use(express.static("web", { index: ["index.html", "index.htm"] }));
 
 app.get("/toxicity", (req, res) =>
-  res.sendFile("web/toxicity.html", { root: "." })
+  res.sendFile("web/toxicity.html", { root: __dirname + "/web" })
 );
+
+app.get("/shop/404", (req, res) =>
+  res.sendFile("B&N/404.html", { root: __dirname + "/web" })
+);
+
+app.get("/shop/cart/:asset*?", (req, res) => {
+  const { asset } = req.params;
+  const path = "B&N/" + (asset || "cart.html");
+
+  console.log(chalk.cyan(req.url), `⇒`, path);
+  res.sendFile(path, { root: __dirname + "/web" });
+});
+
+app.get("/shop/products/:asset*?", (req, res) => {
+  const { asset } = req.params;
+  const path = "B&N/" + (asset || "products.html");
+
+  console.log(chalk.white(req.url), `⇒`, path);
+  res.sendFile(path, { root: __dirname + "/web" });
+});
+
+app.get("/shop/:asset*?", (req, res) => {
+  const { asset } = req.params;
+  const path = "B&N/" + (asset || "home.html");
+
+  console.log(chalk.red(req.url), `⇒`, path);
+  res.sendFile(path, { root: __dirname + "/web" });
+});
 
 // app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

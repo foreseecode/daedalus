@@ -129,6 +129,7 @@ const getPersonas = () => {
 
 //========
 // DOM
+
 function updateDisplay() {
   const persona = getState().personas[0];
 
@@ -138,7 +139,7 @@ function updateDisplay() {
 
   document.querySelector("#main").innerHTML = [
     `<div class="poi">${
-    POIIndex < 0 ? `---` : Object.keys(personasOfInterest)[POIIndex]
+      POIIndex < 0 ? `---` : Object.keys(personasOfInterest)[POIIndex]
     }</div>`,
     `current personas: <pre>${persona}</pre>`,
     `current state: <pre>${JSON.stringify(getState(), 0, 2)}</pre>`
@@ -152,7 +153,7 @@ window.FSR = { getState, getPersonas, clearState };
 
 //========
 
-window.addEventListener("unload", e => {
+window.addEventListener("unload", () => {
   POSTPersonas(getPersonas());
 });
 
@@ -161,8 +162,6 @@ function POSTPersonas(personas) {
   let personasToSend = personas.filter(p => !pp.includes(p));
 
   if (!personasToSend.length) return;
-
-  console.warn("todo: POST personas to server", personasToSend.join(", "));
 
   personasToSend.forEach(p => state.postedPersonas.push(p));
   saveState(false);
@@ -181,12 +180,11 @@ function POSTPersonas(personas) {
 
 leaf.init({ get: getConfig }, { get: getState, save: saveState });
 
-
 // document.getElementById("fsrButton").addEventListener("click", async e => {
 document.getElementById("fsrTextarea").addEventListener("keypress", async e => {
-
   let key = e.which || e.keyCode;
-  if (key === 13) { // 13 is enter
+  if (key === 13) {
+    // 13 is enter
     const text = document.getElementById("fsrTextarea").value;
     const toxicity = await getToxicity(text);
     let state = getState();
