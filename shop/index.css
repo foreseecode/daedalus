@@ -264,7 +264,7 @@ button {
 }
 
 .banner {
-  background: url(/shop//hat1.jpg);
+  background: url(/shop/hat1.jpg);
   background-size: cover;
   background-position: right;
   min-height: 400px;
@@ -276,7 +276,7 @@ button {
 }
 
 .banner-tops {
-  background: url(/shop//tops_header.jpg);
+  background: url(/shop/tops_header.jpg);
   background-size: cover;
   background-position: right;
   min-height: 400px;
