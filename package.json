@@ -6,7 +6,7 @@
     "mongod:init": "echo \"> mongo\n> use mainDB\n> db.createUser({user:\"api\", pwd:\"M4KgnR32\", roles:[{role:\"readWrite\", db:\"mainDB\"}]})\n> db.respondents.insertOne({satisfaction: 0, rage: 0, fidelity: 0})\"",
     "mongod": "mongod --config mongodb/mongod.conf --auth",
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon --exec \"clear && node server.js\""
   },
   "repository": {
     "type": "git",
