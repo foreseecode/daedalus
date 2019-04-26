@@ -5,7 +5,7 @@ function getSatisfaction(satisfaction, satisfactionDimension) {
 
 function getFidelity({ fidelityDimension, fidelityThreshold }, pages) {
   // [{
-  //   origin: location.origin,
+  //   href: location.href,
   //   views: { number: 0, timeOfVisit: [], durationOfVisit: [] }
   // }]
   const totalPageViews = pages.reduce(

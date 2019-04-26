@@ -7,7 +7,7 @@
     "mongod": "mongod --config mongodb/mongod.conf --auth",
     "start": "node server.js",
     "dev": "nodemon --exec \"clear && node server.js\"",
-    "push": "git push && git subtree push --prefix web origin gh-pages"
+    "push": "git push && git subtree push --prefix web href gh-pages"
   },
   "repository": {
     "type": "git",
@@ -49,6 +49,7 @@
     ]
   },
   "devDependencies": {
-    "eslint": "^5.16.0"
+    "eslint": "^5.16.0",
+    "serve": "^11.0.0"
   }
 }

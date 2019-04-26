@@ -2,7 +2,7 @@ import * as leaf from "./leaf.mjs";
 import * as CBD from "./cbd.mjs";
 import { getToxicity } from "./toxicity.mjs";
 
-import { html, render } from "../asset/htmpreact.mjs";
+import { updateUI } from "./ui.mjs";
 
 //========
 // Config
@@ -103,7 +103,7 @@ const personasOfInterest = {
 
 const getPersonas = () => {
   // Customer Based Dimensions
-  const CBDs = {
+  const currentCBDs = {
     satisfactionDimension: CBD.getSatisfaction(
       getState().satisfactionDimension,
       config.CBD.satisfactionDimension
@@ -112,59 +112,17 @@ const getPersonas = () => {
     fidelityDimension: CBD.getFidelity(config.CBD, getState().pages)
   };
 
-  const personas = [Object.values(CBDs).join("-")];
-  getState().personas = personas;
+  getState().currentCBDs = currentCBDs;
+
   saveState(false);
 
-  POSTPersonas(personas);
+  POSTPersonas(Object.values(currentCBDs));
 
   /* HACKY */
-  updateDisplay();
+  updateUI({ personasOfInterest }, getState());
 
-  return personas;
+  return Object.values(currentCBDs).join("-");
 };
-
-//========
-// DOM
-
-function updateDisplay() {
-  const persona = getState().personas[0];
-
-  // document.querySelector("#main").innerHTML = [
-  //   `current personas: <pre>${persona}</pre>`,
-  //   `<ul class="poi">${Object.keys(personasOfInterest)
-  //     .map(title =>
-  //       Object.values(personasOfInterest[title]).join("-") == persona
-  //         ? `<li><b>${title}</b></li>`
-  //         : `<li>${title}</li>`
-  //     )
-  //     .join("\n")}</ul>`,
-  //   `current state: <pre>${JSON.stringify(getState(), 0, 2)}</pre>`
-  // ].join("");
-
-  render(
-    html`
-      <div>
-        current personas:
-        <pre>${persona}</pre>
-        <ul class="poi">
-          ${Object.keys(personasOfInterest).map(title =>
-            Object.values(personasOfInterest[title]).join("-") == persona
-              ? html`
-                  <li><b>${title}</b></li>
-                `
-              : html`
-                  <li>${title}</li>
-                `
-          )}
-        </ul>
-        current state:
-        <pre>${JSON.stringify(getState(), 0, 2)}</pre>
-      </div>
-    `,
-    document.querySelector(".container.nav-container")
-  );
-}
 
 //========
 // API
@@ -203,13 +161,15 @@ leaf.init({ get: getConfig }, { get: getState, save: saveState });
 // document.getElementById("fsrButton").addEventListener("click", async e => {
 
 // document.getElementById("fsrTextarea").addEventListener("keypress", async e => {
-//   let key = e.which || e.keyCode;
-//   if (key === 13) {
-//     // 13 is enter
-//     const text = document.getElementById("fsrTextarea").value;
-//     const toxicity = await getToxicity(text);
-//     let state = getState();
-//     state.satisfactionDimension = toxicity.some(el => el.results[0].match);
-//     saveState();
-//   }
+// let key = e.which || e.keyCode;
+// // 13 is enter
+// if (key !== 13) {
+//   return;
+// }
+
+// const text = document.getElementById("fsrTextarea").value;
+// const toxicity = await getToxicity(text);
+
+// getState().satisfactionDimension = toxicity.some(el => el.results[0].match);
+// saveState();
 // });
