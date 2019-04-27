@@ -30,6 +30,25 @@ const config = Object.freeze({
     fidelityDimension: ["occasional", "regular", "fan"],
 
     satisfactionDimension: ["toxic", "neutral"]
+  },
+
+  // Possible personas to fit
+  personasOfInterest: {
+    sloth: {
+      satisfaction: "neutral",
+      rage: "calm",
+      fidelity: "occasional"
+    },
+    tranquil: {
+      satisfaction: "neutral",
+      rage: "calm",
+      fidelity: "regular"
+    },
+    hardcore: {
+      satisfaction: "toxic",
+      rage: "enraged",
+      fidelity: "fan"
+    }
   }
 });
 
@@ -39,14 +58,13 @@ const getConfig = () => config;
 // State
 
 const defaultState = Object.freeze({
-  pages: [],
-  mouse: {
-    bursts: {
-      // nb clicks in a sequence: [time of occurences of this sequence]
-      // 3: [1552587248349]
-    },
-    speeds: {}
-  },
+  pages: [
+    // {
+    //   href: null,
+    //   views: { number: 0, timeOfVisit: [], durationOfVisit: [] },
+    //   mouse: { bursts: {}, speeds: {} }
+    // }
+  ],
   postedPersonas: []
 });
 
@@ -54,8 +72,6 @@ let state = {
   ...defaultState,
   ...JSON.parse(localStorage.getItem("daedalus"))
 };
-// HACKY is there a better way to spread nested objects?
-state.mouse = { ...defaultState.mouse, ...state.mouse };
 
 const getState = () => state;
 
@@ -65,8 +81,8 @@ const saveState = (/* HACKY */ updatePersonas = true) => {
     ...defaultState,
     ...getState()
   };
-  // HACKY is there a better way to spread nested objects?
-  state.mouse = { ...defaultState.mouse, ...getState().mouse };
+
+  state.pages = state.pages || defaultState.pages;
 
   localStorage.setItem("daedalus", JSON.stringify(state));
 
@@ -75,31 +91,13 @@ const saveState = (/* HACKY */ updatePersonas = true) => {
 };
 
 const clearState = () => {
-  state = null;
+  state = {};
+  leaf.initData();
   saveState();
 };
 
 //========
 // Persona
-
-// Possible personas to fit
-const personasOfInterest = {
-  sloth: {
-    satisfaction: "neutral",
-    rage: "calm",
-    fidelity: "occasional"
-  },
-  tranquil: {
-    satisfaction: "neutral",
-    rage: "calm",
-    fidelity: "regular"
-  },
-  hardcore: {
-    satisfaction: "toxic",
-    rage: "enraged",
-    fidelity: "fan"
-  }
-};
 
 const getPersonas = () => {
   // Customer Based Dimensions
@@ -108,7 +106,7 @@ const getPersonas = () => {
       getState().satisfactionDimension,
       config.CBD.satisfactionDimension
     ),
-    rageDimension: CBD.getRage(config.CBD, getState().mouse),
+    rageDimension: CBD.getRage(config.CBD, leaf.getCurrentPage().mouse),
     fidelityDimension: CBD.getFidelity(config.CBD, getState().pages)
   };
 
@@ -119,7 +117,7 @@ const getPersonas = () => {
   POSTPersonas(Object.values(currentCBDs));
 
   /* HACKY */
-  updateUI({ personasOfInterest }, getState());
+  updateUI(config, getState());
 
   return Object.values(currentCBDs).join("-");
 };
