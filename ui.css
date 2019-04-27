@@ -9,7 +9,7 @@
 
 .ui-container.theme-a {
   --c-main: #222;
-  --c-sub: #eeeeee;
+  --c-sub: #cdcdcd;
   --c-secondary: #fefefe;
   --c-accent: #009fea;
   --c-success: #11e111;
@@ -19,7 +19,7 @@
 
 .ui-container.theme-b {
   --c-main: #efefef;
-  --c-sub: #eeeeee;
+  --c-sub: #cdcdcd;
   --c-secondary: #222;
   --c-accent: #009fea;
   --c-success: #11e111;
@@ -96,9 +96,69 @@
   flex: 1 1 1%;
 }
 
-.ui-container .leaves {
-}
 .ui-container .cbds .content {
+  text-align: right;
 }
-.ui-container .segments {
+
+/* ======================= */
+
+.sparkline {
+  --high: 1.5em;
+  --thick: 0.1em;
+  position: relative;
+  display: inline-block;
+  vertical-align: bottom;
+  /* text-align: left; */
+  flex-direction: row;
+  width: 4em;
+  height: calc(var(--high));
+}
+
+.sparkline::before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: calc(var(--high) / 2);
+  border-bottom: var(--thick) solid var(--c-sub);
+}
+
+.sparkline .grades {
+  position: absolute;
+  top: calc(var(--high) / 4 - (var(--thick) * 0.5));
+  width: 100%;
+  height: calc(var(--high) / 2);
+}
+
+.sparkline .grade {
+  float: left;
+  /* width: from JS, style */
+  height: 100%;
+  filter: saturate(50%);
+}
+
+/* note: last child is the marker */
+.sparkline .grade:not(:nth-child(-1)) {
+  border-right: var(--thick) solid var(--c-secondary);
+}
+
+.sparkline .grade:not(:first-child) {
+  border-left: var(--thick) solid var(--c-sub);
+}
+
+.sparkline .marker {
+  position: absolute;
+  /* width: from JS, style */
+  height: 100%;
+  border-right: calc(var(--thick) * 1.5) solid var(--c-main);
+  display: flex;
+  align-items: center;
+}
+
+.sparkline .marker:after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: calc(var(--thick) * 1.5);
+  background: var(--c-main);
+  filter: opacity(75%);
 }
