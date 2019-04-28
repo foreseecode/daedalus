@@ -2,7 +2,9 @@ import * as leaf from "./leaf.mjs";
 import * as CBD from "./cbd.mjs";
 import { getToxicity } from "./toxicity.mjs";
 
-import { updateUI } from "./ui.mjs";
+import * as ui from "./ui.mjs";
+
+const renderUI = () => ui.update(config, state);
 
 //========
 // Config
@@ -15,7 +17,7 @@ const config = Object.freeze({
     // How many times a speed is reached counts
     speedFrequencyThreshold: 10,
     mouseSpeedResolution: 4000,
-    // How many clicks in a burst to be considered a "rage"?
+    // How many clicks in a burst to be considered?
     clickBurstThreshold: 4,
     // associated w clickBurstThreshold & mouseSpeed:
     // If any of rageBurst or mouseSpeed never reached more than the threshold,
@@ -57,43 +59,33 @@ const getConfig = () => config;
 //========
 // State
 
-const defaultState = Object.freeze({
-  pages: [
-    // {
-    //   href: null,
-    //   views: { number: 0, timeOfVisit: [], durationOfVisit: [] },
-    //   mouse: { bursts: {}, speeds: {} }
-    // }
-  ],
-  postedPersonas: []
+const getDefaultState = () => ({
+  leaf: leaf.initData(),
+  CBD: CBD.initData()
 });
 
 let state = {
-  ...defaultState,
+  ...getDefaultState(),
   ...JSON.parse(localStorage.getItem("daedalus"))
 };
 
-const getState = () => state;
-
-const saveState = (/* HACKY */ updatePersonas = true) => {
+const saveState = () => {
   // make sure that the state contains at least the defaults before saving
   state = {
-    ...defaultState,
-    ...getState()
+    ...getDefaultState,
+    ...state
   };
-
-  state.pages = state.pages || defaultState.pages;
 
   localStorage.setItem("daedalus", JSON.stringify(state));
 
-  //todo: /* HACKY */ just to update display
-  if (updatePersonas) getPersonas();
+  return state;
 };
 
 const clearState = () => {
-  state = {};
-  leaf.initData();
+  state = getDefaultState();
+  state.visible = true;
   saveState();
+  renderUI();
 };
 
 //========
@@ -101,31 +93,24 @@ const clearState = () => {
 
 const getPersonas = () => {
   // Customer Based Dimensions
-  const currentCBDs = {
+  state.CBD = {
     satisfactionDimension: CBD.getSatisfaction(
-      getState().satisfactionDimension,
+      state.satisfactionDimension,
       config.CBD.satisfactionDimension
     ),
     rageDimension: CBD.getRage(config.CBD, leaf.getCurrentPage().mouse),
-    fidelityDimension: CBD.getFidelity(config.CBD, getState().pages)
+    fidelityDimension: CBD.getFidelity(config.CBD, state.leaf.pages)
   };
 
-  getState().currentCBDs = currentCBDs;
+  saveState();
 
-  saveState(false);
-
-  POSTPersonas(Object.values(currentCBDs));
-
-  /* HACKY */
-  updateUI(config, getState());
-
-  return Object.values(currentCBDs).join("-");
+  return Object.values(CBD).join("-");
 };
 
 //========
 // API
 
-window.FSR = { getState, getPersonas, clearState };
+window.FSR = { getState: () => state, getPersonas, clearState };
 
 //========
 
@@ -134,7 +119,7 @@ window.addEventListener("unload", () => {
 });
 
 function POSTPersonas(personas) {
-  let pp = getState().postedPersonas;
+  let pp = state.postedPersonas;
   let personasToSend = personas.filter(p => !pp.includes(p));
 
   if (!personasToSend.length) return;
@@ -154,7 +139,7 @@ function POSTPersonas(personas) {
 
 //========
 
-leaf.init({ get: getConfig }, { get: getState, save: saveState });
+leaf.init({ get: getConfig }, { get: () => state, save: saveState });
 
 // document.getElementById("fsrButton").addEventListener("click", async e => {
 
@@ -168,6 +153,11 @@ leaf.init({ get: getConfig }, { get: getState, save: saveState });
 // const text = document.getElementById("fsrTextarea").value;
 // const toxicity = await getToxicity(text);
 
-// getState().satisfactionDimension = toxicity.some(el => el.results[0].match);
+// state.satisfactionDimension = toxicity.some(el => el.results[0].match);
 // saveState();
+// renderUI();
 // });
+
+//========
+
+renderUI();

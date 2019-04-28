@@ -5,18 +5,27 @@ let saveState = () => console.error("leaf.init must be called");
 //========
 // Page views
 
-const defaultPage = Object.freeze({
-  href: null,
-  views: { number: 0, timeOfVisit: [], durationOfVisit: [] },
-  mouse: { bursts: {}, speeds: {} }
-});
+const getANewPage = href =>
+  Object.freeze({
+    href,
+    views: Object.seal({
+      number: 0,
+      timeOfVisit: [],
+      durationOfVisit: []
+    }),
+    mouse: Object.freeze({
+      bursts: {},
+      speeds: {}
+    })
+  });
 
 const getCurrentPage = () => {
-  let page = getState().pages.find(p => p.href == location.href);
+  let page = getState().leaf.pages.find(p => p.href == location.href);
 
   if (!page) {
-    page = { ...defaultPage, ...{ href: location.href } };
-    getState().pages.push(page);
+    throw "NOT INITIALIZED";
+    page = getANewPage(location.href);
+    getState().leaf.pages.push(page);
   }
 
   return page;
@@ -123,16 +132,16 @@ function init(config, state) {
 
   window.addEventListener("unload", () => {
     addDurationPageView(getCurrentPage());
-    saveState();
+    console.log(saveState());
   });
 }
 
 function initData() {
-  getState().pages = [];
-
-  incrementPageViews(getCurrentPage());
-
-  saveState();
+  return {
+    pages: [getANewPage(location.href)]
+  };
 }
+
+//========
 
 export { init, initData, getCurrentPage };

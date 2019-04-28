@@ -242,14 +242,14 @@ input {
   width: 100%;
 }
 button {
-  background: #8cc541;
-  color: #000000;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
-  font-size: 14px;
-  font-weight: 300;
-  transition: 0.4s;
+  /* background: #8cc541; */
+  /* color: #000000; */
+  /* border: none; */
+  /* border-radius: 5px; */
+  /* padding: 10px 20px; */
+  /* font-size: 14px; */
+  /* font-weight: 300; */
+  /* transition: 0.4s; */
 }
 .main-nav .icon {
   display: none;
