@@ -30,13 +30,15 @@
 .ui-container {
   z-index: 99;
   position: fixed;
-  width: 92%;
+  width: 95%;
+  max-width: 45em;
   height: 20em;
-  left: 53%;
+  right: 1em;
   top: -20em;
-  margin-left: -49%;
-  padding: 7em 1em 1em 1em;
+  padding: 7.5em 0.5em 0.5em 0.5em;
   display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
   transition-duration: var(--t-transition);
   transition-property: top, box-shadow;
   transition-timing-function: ease-out;
@@ -50,10 +52,23 @@
   box-shadow: 0 0.3em 0.6em #62708540;
 }
 
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
   .top {
     margin-right: 2em;
   }
+} */
+
+.ui-container button {
+  padding: 0.25em 0.5em;
+  background: inherit;
+  color: var(--c-main);
+  border: 0.1em solid var(--c-sub);
+  border-radius: var(--n-bradius);
+  transition: none;
+}
+.ui-container button:active {
+  color: var(--c-accent);
+  border-color: var(--c-accent);
 }
 
 .ui-container .hanger {
@@ -71,7 +86,14 @@
 
 /* ======================= */
 
-.ui-container > * {
+.ui-container > .content {
+  display: flex;
+  flex-direction: row;
+}
+
+/* ======================= */
+
+.ui-container > .content > * {
   flex: 1 1 30%;
   padding: 0.25em;
 }
@@ -80,11 +102,9 @@
   font-variant-caps: all-small-caps;
   text-align: center;
   padding-bottom: 0.25em;
-  border-bottom: 0.1em solid var(--c-sub);
-  /* color: var(--c-secondary); */
-  /* background: var(--c-main); */
+  /* border-bottom: 0.1em solid var(--c-sub); */
 }
-.ui-container .content {
+.ui-container > .content .content {
   text-align: center;
   margin: 0;
   padding: 0.25em;
@@ -93,28 +113,34 @@
 
 .ui-container .arrows {
   color: var(--c-sub);
-  flex: 1 1 1%;
+  flex: 0 0 auto;
 }
 
 .ui-container .cbds .content {
   text-align: right;
 }
 
+.ui-container .leaves .content *[title] > span:first-child,
+.ui-container .cbds .content *[title] > span:first-child {
+  color: var(--c-sub);
+  margin-right: 0.3em;
+  float: left;
+}
+
 /* ======================= */
 
-.sparkline {
+.ui-container .sparkline {
   --high: 1.5em;
   --thick: 0.1em;
   position: relative;
   display: inline-block;
   vertical-align: bottom;
-  /* text-align: left; */
   flex-direction: row;
   width: 4em;
   height: calc(var(--high));
 }
 
-.sparkline::before {
+.ui-container .sparkline::before {
   content: "";
   display: block;
   width: 100%;
@@ -122,14 +148,14 @@
   border-bottom: var(--thick) solid var(--c-sub);
 }
 
-.sparkline .grades {
+.ui-container .sparkline .grades {
   position: absolute;
   top: calc(var(--high) / 4 - (var(--thick) * 0.5));
   width: 100%;
   height: calc(var(--high) / 2);
 }
 
-.sparkline .grade {
+.ui-container .sparkline .grade {
   float: left;
   /* width: from JS, style */
   height: 100%;
@@ -137,28 +163,36 @@
 }
 
 /* note: last child is the marker */
-.sparkline .grade:not(:nth-child(-1)) {
+.ui-container .sparkline .grade:not(:nth-child(-1)) {
   border-right: var(--thick) solid var(--c-secondary);
 }
 
-.sparkline .grade:not(:first-child) {
+.ui-container .sparkline .grade:not(:first-child) {
   border-left: var(--thick) solid var(--c-sub);
 }
 
-.sparkline .marker {
+.ui-container .sparkline .marker {
   position: absolute;
   /* width: from JS, style */
   height: 100%;
   border-right: calc(var(--thick) * 1.5) solid var(--c-main);
   display: flex;
   align-items: center;
+  transition: width linear var(--t-transition);
 }
 
-.sparkline .marker:after {
+.ui-container .sparkline .marker:after {
   content: "";
   display: block;
   width: 100%;
   height: calc(var(--thick) * 1.5);
   background: var(--c-main);
   filter: opacity(75%);
+}
+
+/* ======================= */
+
+.ui-container > .controls {
+  /* https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout/Aligning_Items_in_a_Flex_Container#Using_auto_margins_for_main_axis_alignment */
+  margin-top: auto;
 }
