@@ -91,11 +91,17 @@
   flex-direction: row;
 }
 
+.ui-container li,
+.ui-container ul {
+  list-style: none;
+}
+
 /* ======================= */
 
 .ui-container > .content > * {
   flex: 1 1 30%;
   padding: 0.25em;
+  margin: 0;
 }
 
 .ui-container .title {
@@ -104,11 +110,23 @@
   padding-bottom: 0.25em;
   /* border-bottom: 0.1em solid var(--c-sub); */
 }
-.ui-container > .content .content {
-  text-align: center;
+
+.ui-container > .content .dataless-step {
+  text-align: right;
   margin: 0;
-  padding: 0.25em;
-  list-style: none;
+  padding: 0;
+  width: 100%;
+}
+
+.ui-container > .content .dataless-step > * {
+  display: flex;
+  flex-direction: row;
+  padding: .25em;
+}
+
+.ui-container > .content .segments .dataless-step > * {
+  display: inherit;
+  text-align: center;
 }
 
 .ui-container .arrows {
@@ -120,11 +138,17 @@
   text-align: right;
 }
 
-.ui-container .leaves .content *[title] > span:first-child,
-.ui-container .cbds .content *[title] > span:first-child {
+.ui-container .leaves .content *[title] > *,
+.ui-container .cbds .content *[title] > * {
+  flex: 0 1 50%;
+  text-align: left;
+}
+
+.ui-container .leaves .content *[title] > *:first-child,
+.ui-container .cbds .content *[title] > *:first-child {
   color: var(--c-sub);
-  margin-right: 0.3em;
-  float: left;
+  text-align: right;
+  padding-right: 0.5em;
 }
 
 /* ======================= */
@@ -133,14 +157,12 @@
   --high: 1.5em;
   --thick: 0.1em;
   position: relative;
-  display: inline-block;
-  vertical-align: bottom;
-  flex-direction: row;
+  /* display: inline-block; */
   width: 4em;
   height: calc(var(--high));
 }
 
-.ui-container .sparkline::before {
+.ui-container .sparkline.sparkruler::before {
   content: "";
   display: block;
   width: 100%;
@@ -178,7 +200,7 @@
   border-right: calc(var(--thick) * 1.5) solid var(--c-main);
   display: flex;
   align-items: center;
-  transition: width linear var(--t-transition);
+  transition: width ease-out var(--t-transition);
 }
 
 .ui-container .sparkline .marker:after {
@@ -190,6 +212,23 @@
   filter: opacity(75%);
 }
 
+/* ----------------------- */
+.ui-container .sparkline.sparkhistogram .columns {
+  display: flex;
+  height: 100%;
+  /* border-top: var(--thick) dotted var(--c-sub); */
+  /* border-bottom: var(--thick) dotted var(--c-sub); */
+  background: #f6f6f6;
+  align-items: flex-end;
+}
+
+.ui-container .sparkline.sparkhistogram .column {
+  flex: 1 1 auto;
+  margin-left: var(--thick);
+  background: var(--c-main);
+  transition: height ease-out var(--t-transition);
+  margin-top: -0.1em;
+}
 /* ======================= */
 
 .ui-container > .controls {
