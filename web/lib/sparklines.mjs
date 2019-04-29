@@ -32,7 +32,7 @@ function SparkRuler({ children, ...props }) {
 function SparkHistogram({ children, ...props }) {
   const { columns } = props;
 
-  const maxValue = Math.max(...Object.values(columns));
+  const maxValue = Math.max(...Object.values(columns)) || 1;
 
   return h`<div class="sparkline sparkhistogram">
     <div class="columns">

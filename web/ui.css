@@ -107,8 +107,9 @@
 .ui-container .title {
   font-variant-caps: all-small-caps;
   text-align: center;
-  padding-bottom: 0.25em;
-  /* border-bottom: 0.1em solid var(--c-sub); */
+  padding-bottom: 0.5em;
+  margin-bottom: 0.75em;
+  border-bottom: 0.1em solid var(--c-sub);
 }
 
 .ui-container > .content .dataless-step {
@@ -124,11 +125,6 @@
   padding: 0.25em;
 }
 
-.ui-container > .content .segments .dataless-step > * {
-  display: inherit;
-  text-align: center;
-}
-
 .ui-container .arrows {
   color: var(--c-sub);
   flex: 0 0 auto;
@@ -139,13 +135,15 @@
 }
 
 .ui-container .leaves .content *[title] > *,
-.ui-container .cbds .content *[title] > * {
+.ui-container .cbds .content *[title] > *,
+.ui-container .segments .content *[title] > * {
   flex: 0 1 50%;
   text-align: left;
 }
 
 .ui-container .leaves .content *[title] > *:first-child,
-.ui-container .cbds .content *[title] > *:first-child {
+.ui-container .cbds .content *[title] > *:first-child,
+.ui-container .segments .content *[title] > *:first-child {
   color: var(--c-sub);
   text-align: right;
   padding-right: 0.5em;

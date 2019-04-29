@@ -1,9 +1,9 @@
-function getSatisfaction(satisfaction, satisfactionDimension) {
-  return satisfactionDimension[satisfaction ? 0 : 1];
-  // return satisfactionDimension[~~(Math.random() * 1)];
+function getSatisfaction(satisfaction, value) {
+  return satisfaction[value ? 0 : 1];
+  // return satisfaction[~~(Math.random() * 1)];
 }
 
-function getFidelity({ fidelityDimension, fidelityThreshold }, pages) {
+function getFidelity({ fidelity, fidelityThreshold }, pages) {
   // [{
   //   href: location.href,
   //   views: { number: 0, timeOfVisit: [], durationOfVisit: [] }
@@ -13,20 +13,19 @@ function getFidelity({ fidelityDimension, fidelityThreshold }, pages) {
     0
   );
 
-  return fidelityDimension[
-    // lower bound
-    Math.max(
-      0,
-      // upper bound
-      Math.min(
-        fidelityDimension.length - 1,
-        ~~(totalPageViews / fidelityThreshold)
-      )
-    )
-  ];
+  return totalPageViews
+    ? fidelity[
+        // lower bound
+        Math.max(
+          0,
+          // upper bound
+          Math.min(fidelity.length - 1, ~~(totalPageViews / fidelityThreshold))
+        )
+      ]
+    : "∅";
 }
 
-function getRage({ rageDimension, clickBurstThreshold }, mouseData) {
+function getRage({ rage, clickBurstThreshold }, mouseData) {
   // using clicks and moves is hard. Each should have a different
   // weight in the final decision.
 
@@ -34,24 +33,27 @@ function getRage({ rageDimension, clickBurstThreshold }, mouseData) {
   // rage
   let burstIndex = 0;
 
-  const biggestBurst = Math.max(...Object.keys(mouseData.bursts));
+  const biggestBurst = Math.max(
+    ...Object.keys(mouseData.bursts)
+      // only consider those that occured more than 2 times
+      .map(nbClicks => (mouseData.bursts[nbClicks] < 2 ? 0 : nbClicks))
+  );
 
-  // more than minimum
-  if (biggestBurst > clickBurstThreshold) {
-    burstIndex = Math.min(
-      ~~(biggestBurst / clickBurstThreshold),
-      rageDimension.length - 1
-    );
-  }
+  burstIndex = Math.max(
+    0,
+    Math.min(~~(biggestBurst / clickBurstThreshold) - 1, rage.length - 1)
+  );
+
+  return rage[burstIndex];
 }
 
 //========
 
 function initData() {
   return {
-    satisfactionDimension: null,
-    rageDimension: null,
-    fidelityDimension: null
+    satisfaction: null,
+    rage: null,
+    fidelity: null
   };
 }
 

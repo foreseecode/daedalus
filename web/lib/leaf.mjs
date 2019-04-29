@@ -9,7 +9,7 @@ const getANewPage = href =>
   Object.freeze({
     href,
     views: Object.seal({
-      number: 1,
+      number: 0,
       timeOfVisit: [],
       durationOfVisit: []
     }),
@@ -22,7 +22,6 @@ const getCurrentPage = () => {
   let page = getState().leaf.pages.find(p => p.href == location.href);
 
   if (!page) {
-    throw "NOT INITIALIZED";
     page = getANewPage(location.href);
     getState().leaf.pages.push(page);
   }
@@ -52,13 +51,12 @@ const addDurationPageView = page => {
 // Mouse
 
 function watchMouseClicks() {
+  const burstThreshold = getConfig().CBD.clickBurstThreshold;
   let burstTimeout = null;
   // number of clicks in the current burst
   let burstLength = 0;
 
   const burstDetector = e => {
-    const burstThreshold = getConfig().CBD.clickBurstThreshold;
-
     if (burstTimeout) {
       burstLength++;
       // reset timeout to get a sequence (burst) of clicks
