@@ -44,7 +44,6 @@
   transition-timing-function: ease-out;
   color: var(--c-main);
   background-color: var(--c-secondary);
-  font-size: small;
 }
 
 .ui-container[visible] {
@@ -52,13 +51,41 @@
   box-shadow: 0 0.3em 0.6em #62708540;
 }
 
+.ui-container .hanger {
+  z-index: 0;
+  position: absolute;
+  top: 99%;
+  right: 0;
+  width: 3.33rem;
+  height: 3.33rem;
+  border-radius: 0 0 var(--n-bradius) var(--n-bradius);
+  padding: 0.5em;
+  background-color: var(--c-secondary);
+  box-shadow: 0 0.5em 0.5em #62708540;
+}
+
 /* @media (max-width: 768px) {
   .top {
     margin-right: 2em;
   }
 } */
+/* ======================= */
 
-.ui-container button {
+.ui-container.guide[visible] {
+  /* font-family: "Playfair Display", Georgia, sans-serif; */
+  /* font-size: larger; */
+  text-align: center;
+  padding-top: 13em;
+  top: -12em;
+}
+
+/* ======================= */
+
+.ui-container.dashboard {
+  font-size: small;
+}
+
+.ui-container.dashboard button {
   padding: 0.25em 0.5em;
   background: inherit;
   color: var(--c-main);
@@ -66,45 +93,32 @@
   border-radius: var(--n-bradius);
   transition: none;
 }
-.ui-container button:active {
+.ui-container.dashboard button:active {
   color: var(--c-accent);
   border-color: var(--c-accent);
 }
 
-.ui-container .hanger {
-  z-index: 0;
-  position: absolute;
-  top: 99%;
-  right: 0;
-  width: 3.33em;
-  height: 3.33em;
-  border-radius: 0 0 var(--n-bradius) var(--n-bradius);
-  padding: 0.5em;
-  background-color: var(--c-secondary);
-  box-shadow: 0 0.5em 0.5em #62708540;
-}
-
 /* ======================= */
 
-.ui-container > .content {
+.ui-container.dashboard > .content {
   display: flex;
   flex-direction: row;
 }
 
-.ui-container li,
-.ui-container ul {
+.ui-container.dashboard li,
+.ui-container.dashboard ul {
   list-style: none;
 }
 
 /* ======================= */
 
-.ui-container > .content > * {
+.ui-container.dashboard > .content > * {
   flex: 1 1 30%;
   padding: 0.25em;
   margin: 0;
 }
 
-.ui-container .title {
+.ui-container.dashboard .title {
   font-variant-caps: all-small-caps;
   text-align: center;
   padding-bottom: 0.5em;
@@ -112,38 +126,38 @@
   border-bottom: 0.1em solid var(--c-sub);
 }
 
-.ui-container > .content .dataless-step {
+.ui-container.dashboard > .content .dataless-step {
   text-align: right;
   margin: 0;
   padding: 0;
   width: 100%;
 }
 
-.ui-container > .content .dataless-step > * {
+.ui-container.dashboard > .content .dataless-step > * {
   display: flex;
   flex-direction: row;
   padding: 0.25em;
 }
 
-.ui-container .arrows {
+.ui-container.dashboard .arrows {
   color: var(--c-sub);
   flex: 0 0 auto;
 }
 
-.ui-container .cbds .content {
+.ui-container.dashboard .cbds .content {
   text-align: right;
 }
 
-.ui-container .leaves .content *[title] > *,
-.ui-container .cbds .content *[title] > *,
-.ui-container .segments .content *[title] > * {
+.ui-container.dashboard .leaves .content *[title] > *,
+.ui-container.dashboard .cbds .content *[title] > *,
+.ui-container.dashboard .segments .content *[title] > * {
   flex: 0 1 50%;
   text-align: left;
 }
 
-.ui-container .leaves .content *[title] > *:first-child,
-.ui-container .cbds .content *[title] > *:first-child,
-.ui-container .segments .content *[title] > *:first-child {
+.ui-container.dashboard .leaves .content *[title] > *:first-child,
+.ui-container.dashboard .cbds .content *[title] > *:first-child,
+.ui-container.dashboard .segments .content *[title] > *:first-child {
   color: var(--c-sub);
   text-align: right;
   padding-right: 0.5em;
@@ -151,7 +165,7 @@
 
 /* ======================= */
 
-.ui-container .sparkline {
+.ui-container.dashboard .sparkline {
   --high: 1.5em;
   --thick: 0.1em;
   position: relative;
@@ -160,7 +174,7 @@
   height: calc(var(--high));
 }
 
-.ui-container .sparkline.sparkruler::before {
+.ui-container.dashboard .sparkline.sparkruler::before {
   content: "";
   display: block;
   width: 100%;
@@ -168,14 +182,14 @@
   border-bottom: var(--thick) solid var(--c-sub);
 }
 
-.ui-container .sparkline .grades {
+.ui-container.dashboard .sparkline .grades {
   position: absolute;
   top: calc(var(--high) / 4 - (var(--thick) * 0.5));
   width: 100%;
   height: calc(var(--high) / 2);
 }
 
-.ui-container .sparkline .grade {
+.ui-container.dashboard .sparkline .grade {
   float: left;
   /* width: from JS, style */
   height: 100%;
@@ -183,15 +197,15 @@
 }
 
 /* note: last child is the marker */
-.ui-container .sparkline .grade:not(:nth-child(-1)) {
+.ui-container.dashboard .sparkline .grade:not(:nth-child(-1)) {
   border-right: var(--thick) solid var(--c-secondary);
 }
 
-.ui-container .sparkline .grade:not(:first-child) {
+.ui-container.dashboard .sparkline .grade:not(:first-child) {
   border-left: var(--thick) solid var(--c-sub);
 }
 
-.ui-container .sparkline .marker {
+.ui-container.dashboard .sparkline .marker {
   position: absolute;
   /* width: from JS, style */
   height: 100%;
@@ -201,7 +215,7 @@
   transition: width ease-out var(--t-transition);
 }
 
-.ui-container .sparkline .marker:after {
+.ui-container.dashboard .sparkline .marker:after {
   content: "";
   display: block;
   width: 100%;
@@ -211,7 +225,7 @@
 }
 
 /* ----------------------- */
-.ui-container .sparkline.sparkhistogram .columns {
+.ui-container.dashboard .sparkline.sparkhistogram .columns {
   display: flex;
   height: 100%;
   /* border-top: var(--thick) dotted var(--c-sub); */
@@ -220,7 +234,7 @@
   align-items: flex-end;
 }
 
-.ui-container .sparkline.sparkhistogram .column {
+.ui-container.dashboard .sparkline.sparkhistogram .column {
   flex: 1 1 auto;
   margin-left: var(--thick);
   background: var(--c-main);
@@ -229,7 +243,7 @@
 }
 /* ======================= */
 
-.ui-container > .controls {
+.ui-container.dashboard > .controls {
   /* https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout/Aligning_Items_in_a_Flex_Container#Using_auto_margins_for_main_axis_alignment */
   margin-top: auto;
 }
