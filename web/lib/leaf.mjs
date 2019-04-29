@@ -9,13 +9,12 @@ const getANewPage = href =>
   Object.freeze({
     href,
     views: Object.seal({
-      number: 0,
+      number: 1,
       timeOfVisit: [],
       durationOfVisit: []
     }),
     mouse: Object.freeze({
-      bursts: {},
-      speeds: {}
+      bursts: {}
     })
   });
 
@@ -52,31 +51,36 @@ const addDurationPageView = page => {
 //========
 // Mouse
 
-function watchMouse() {
-  watchMouseClicks();
-  watchMouseMovements();
-}
-
 function watchMouseClicks() {
-  const bursts = getCurrentPage().mouse.bursts;
-
   let burstTimeout = null;
   // number of clicks in the current burst
   let burstLength = 0;
 
   const burstDetector = e => {
+    const burstThreshold = getConfig().CBD.clickBurstThreshold;
+
     if (burstTimeout) {
       burstLength++;
-      // reset timeout to get a sequence of click
+      // reset timeout to get a sequence (burst) of clicks
       clearTimeout(burstTimeout);
     }
 
     // prepare for end of burst
     burstTimeout = setTimeout(() => {
-      // 1 would be a simple click, 2 a double-click
-      if (burstLength > 2) {
-        if (!bursts[burstLength]) bursts[burstLength] = 0;
-        bursts[burstLength]++;
+      // end of burst
+      const bursts = getCurrentPage().mouse.bursts;
+
+      // Less than threshold is not interesting
+      if (burstLength >= burstThreshold) {
+        const burstIndex = ~~(burstLength - (burstLength % burstThreshold));
+
+        // avoid gaps for better rendering
+        for (let i = burstThreshold; i <= burstIndex; i += burstThreshold) {
+          bursts[i] = bursts[i] || 0;
+        }
+
+        bursts[burstIndex] = bursts[burstIndex] + 1;
+
         saveState();
       }
 
@@ -87,34 +91,6 @@ function watchMouseClicks() {
 
   document.addEventListener("click", burstDetector);
   document.addEventListener("touch", burstDetector);
-}
-
-function watchMouseMovements() {
-  const speedResolution = getConfig().CBD.mouseSpeedResolution;
-  const speeds = getCurrentPage().mouse.speeds;
-  let lastPos = null;
-
-  document.addEventListener("mousemove", e => {
-    // first time, no speed
-    if (!lastPos) return (lastPos = { x: e.clientX, y: e.clientY });
-
-    const pos = { x: e.clientX, y: e.clientY };
-
-    let speed = Math.sqrt(
-      Math.pow(pos.x - lastPos.x, 2) * Math.pow(pos.y - lastPos.y, 2)
-    );
-    // constrain the speed to a multiple of the speedResolution
-    speed = speed - (speed % speedResolution);
-
-    lastPos = { x: e.clientX, y: e.clientY };
-
-    if (speed < speedResolution) return;
-
-    if (!speeds[speed]) speeds[speed] = 1;
-    else speeds[speed]++;
-
-    saveState();
-  });
 }
 
 //========
@@ -128,7 +104,7 @@ function init(config, state) {
 
   saveState();
 
-  watchMouse();
+  watchMouseClicks();
 
   window.addEventListener("unload", () => {
     addDurationPageView(getCurrentPage());

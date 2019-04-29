@@ -32,16 +32,15 @@ app.options("/data", (req, res, next) => {
 
 app.post("/data", async (req, res) => {
   try {
-    const body = req.body.persona;
-    const [satisfaction, rage, fidelity] = body.split("-");
-    await mongoClient.insertDocuments([{ satisfaction, rage, fidelity }]);
-    res.send({ satisfaction, rage, fidelity });
+    const segment = req.body.segment;
+    await mongoClient.insertDocuments([{ segment }]);
+    res.send({ segment });
   } catch (error) {
     res.sendStatus(500);
   }
 });
 
-app.get("/personas", async (req, res) => {
+app.get("/segments", async (req, res) => {
   const data = await mongoClient.findDocuments();
   res.contentType("application/json");
   res.send(data);
