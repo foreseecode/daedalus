@@ -1,0 +1,19 @@
+{
+  "short_name": "Daedalus",
+  "name": "Daedalus initiative",
+  "icons": [
+    {
+      "src": "/asset/daedalus.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "/favicon.ico",
+      "type": "image/ico",
+      "sizes": "64x64"
+    }
+  ],
+  "background_color": "#FFF",
+  "display": "minimal-ui",
+  "theme_color": "#222"
+}
