@@ -49,13 +49,18 @@ function renderUIContent({ appConfig, appState }) {
     0
   );
 
-  // Concatenate mouseBursts for all pages
+  // Concatenate mouseBursts of all pages
   const mouseBursts = appState.leaf.pages.reduce((sum, p) => {
     Object.keys(p.mouse.bursts).forEach(nbClicks => {
       sum[nbClicks] = (sum[nbClicks] || 0) + p.mouse.bursts[nbClicks];
     });
     return sum;
   }, {});
+  // Make sure to have a minimum of columns to show
+  for (let i = 1, id; i < 5; i++) {
+    id = i * appConfig.CBD.clickBurstThreshold;
+    mouseBursts[id] = mouseBursts[id] || 0;
+  }
 
   return h`<div class="content">
     <div class="leaves">
@@ -101,8 +106,8 @@ function renderUIContent({ appConfig, appState }) {
     <div class="segments">
       <div class="title">Segment</div>
       <ul class="content dataless-step">
-        ${Object.keys(appConfig.personasOfInterest).map(title =>
-          Object.values(appConfig.personasOfInterest[title]) ==
+        ${Object.keys(appConfig.segmentsOfInterest).map(title =>
+          Object.values(appConfig.segmentsOfInterest[title]) ==
           Object.values(appState.CBD)
             ? h`<li>${title}<span style=${{
                 float: "right"

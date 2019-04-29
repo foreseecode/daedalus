@@ -31,8 +31,8 @@ const config = Object.freeze({
     satisfactionDimension: ["toxic", "neutral"]
   },
 
-  // Possible personas to fit
-  personasOfInterest: {
+  // Possible segments to fit
+  segmentsOfInterest: {
     sloth: {
       satisfaction: "neutral",
       rage: "calm",
@@ -86,9 +86,9 @@ const clearState = () => {
 };
 
 //========
-// Persona
+// Segment
 
-const getPersonas = () => {
+const getSegments = () => {
   // Customer Based Dimensions
   state.CBD = {
     satisfactionDimension: CBD.getSatisfaction(
@@ -115,21 +115,21 @@ const getPersonas = () => {
 //========
 // API
 
-window.FSR = { getState: () => state, getPersonas, clearState };
+window.FSR = { getState: () => state, getSegments, clearState };
 
 //========
 
 window.addEventListener("unload", () => {
-  POSTPersonas(getPersonas());
+  POSTSegments(getSegments());
 });
 
-function POSTPersonas(personas) {
-  let pp = state.postedPersonas;
-  let personasToSend = personas.filter(p => !pp.includes(p));
+function POSTSegments(segments) {
+  let pp = state.postedSegments;
+  let segmentsToSend = segments.filter(p => !pp.includes(p));
 
-  if (!personasToSend.length) return;
+  if (!segmentsToSend.length) return;
 
-  personasToSend.forEach(p => state.postedPersonas.push(p));
+  segmentsToSend.forEach(p => state.postedSegments.push(p));
   saveState();
 
   fetch("http://localhost:3005/data", {
@@ -138,7 +138,7 @@ function POSTPersonas(personas) {
       Accept: "application/json",
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({ persona: personas[0] })
+    body: JSON.stringify({ segment: segments[0] })
   });
 }
 

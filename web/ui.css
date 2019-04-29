@@ -121,7 +121,7 @@
 .ui-container > .content .dataless-step > * {
   display: flex;
   flex-direction: row;
-  padding: .25em;
+  padding: 0.25em;
 }
 
 .ui-container > .content .segments .dataless-step > * {
