@@ -4,6 +4,7 @@ import htm from "../asset/htm.mjs";
 const h = htm.bind(hPreact);
 
 import { SparkRuler, SparkHistogram } from "./sparklines.mjs";
+import { Guide } from "./guide.mjs";
 
 const DOM_ROOT = document.querySelector(".ui-container");
 
@@ -18,26 +19,53 @@ function update(appConfig, appState) {
 class UI extends Component {
   constructor() {
     super();
-    this.state = { visible: false };
   }
 
   render({ appConfig, appState }, state) {
     console.log("Rendering", { appConfig, appState }, state, appState.segment);
 
-    state.visible = appState.visible;
+    // todo: clean up
+    Object.assign(state, appState.ui);
+    const setAppUIState = () => Object.assign(appState.ui, state);
 
     return h`
-      <div class="ui-container theme-a" visible=${state.visible}>
+      <div class=${"ui-container theme-a " + state.mode} visible=${
+      state.visible
+    }>
         <img
           class="hanger"
           src="asset/daedalus.svg"
           onclick=${e =>
-            this.setState({ visible: (appState.visible = !state.visible) })}
-        />
+            e.shiftKey
+              ? this.setState(
+                  setAppUIState(
+                    Object.assign(state, {
+                      mode: state.mode === "guide" ? "dashboard" : "guide"
+                    })
+                  )
+                )
+              : this.setState(
+                  setAppUIState(
+                    Object.assign(state, {
+                      visible: !state.visible
+                    })
+                  )
+                )}
+          />
 
-        ${state.visible && renderUIContent({ appConfig, appState })}
+        ${state.visible &&
+          state.mode === "dashboard" &&
+          renderUIContent({ appConfig, appState })}
 
-        ${state.visible && renderUIControls({ appConfig, appState })}
+        ${state.visible &&
+          state.mode === "dashboard" &&
+          renderUIControls({ appConfig, appState })}
+
+        ${state.visible &&
+          state.mode === "guide" &&
+          h`<${Guide}
+           config=${appConfig.ui.guide}
+          />`}
       </div>
     `;
   }
@@ -129,4 +157,11 @@ function renderUIControls({ appConfig, appState }) {
   </div>`;
 }
 
-export { update };
+function initData() {
+  return {
+    mode: "guide", // "dashboard"
+    visible: true
+  };
+}
+
+export { update, initData };
