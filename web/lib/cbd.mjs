@@ -33,15 +33,16 @@ function getRage({ rage, clickBurstThreshold }, mouseData) {
   // rage
   let burstIndex = 0;
 
-  const biggestBurst = Math.max(
-    ...Object.keys(mouseData.bursts)
-      // only consider those that occured more than 2 times
-      .map(nbClicks => (mouseData.bursts[nbClicks] < 2 ? 0 : nbClicks))
-  );
+  const sumBigBurst = Object.keys(mouseData.clickBursts)
+    // only consider those that occured more than 2 times
+    .reduce(
+      (sum, nbClicks) => sum + mouseData.clickBursts[nbClicks] * nbClicks,
+      0
+    );
 
   burstIndex = Math.max(
     0,
-    Math.min(~~(biggestBurst / clickBurstThreshold) - 1, rage.length - 1)
+    Math.min(~~(sumBigBurst / clickBurstThreshold) - 1, rage.length - 1)
   );
 
   return rage[burstIndex];
