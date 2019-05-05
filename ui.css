@@ -2,16 +2,18 @@
   display: none;
 }
 .ui-container {
-  --n-bradius: 0.25em;
+  --n-bradius: 0.5em;
   --t-transition: 150ms;
   --n-header: 2em;
 }
 
 .ui-container.theme-a {
   --c-main: #222;
-  --c-sub: #cdcdcd;
+  --c-sub: #ccc;
+  --c-sub-sub: #f9f9f9;
   --c-secondary: #fefefe;
-  --c-accent: #009fea;
+  --c-accent: #1181ff;
+  --c-accent2: #e4f0fe;
   --c-success: #11e111;
   --c-warning: #f8de00;
   --c-failure: #f12330;
@@ -19,9 +21,11 @@
 
 .ui-container.theme-b {
   --c-main: #efefef;
-  --c-sub: #cdcdcd;
+  --c-sub: #fafafe;
+  --c-sub-sub: #ddd;
   --c-secondary: #222;
-  --c-accent: #009fea;
+  --c-accent: #1181ff;
+  --c-accent2: #e4f0fe;
   --c-success: #11e111;
   --c-warning: #f8de00;
   --c-failure: #f12330;
@@ -30,38 +34,38 @@
 .ui-container {
   z-index: 99;
   position: fixed;
-  width: 95%;
-  max-width: 45em;
-  height: 20em;
-  right: 1em;
-  top: -20em;
-  padding: 7.5em 0.5em 0.5em 0.5em;
+  width: 100%;
+  max-width: 50em;
+  height: 32em;
+  right: 0;
+  bottom: -32em;
+  /* padding: 0.5em 0.5em 7.5em 0.5em; */
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
   transition-duration: var(--t-transition);
-  transition-property: top, box-shadow;
+  transition-property: bottom, box-shadow;
   transition-timing-function: ease-out;
   color: var(--c-main);
   background-color: var(--c-secondary);
 }
 
 .ui-container[visible] {
-  top: -7em;
-  box-shadow: 0 0.3em 0.6em #62708540;
+  bottom: -9em;
+  box-shadow: 0 -0.5em 1em #62708540;
 }
 
 .ui-container .hanger {
-  z-index: 0;
+  z-index: 98;
   position: absolute;
-  top: 99%;
+  bottom: 100%;
   right: 0;
-  width: 3.33rem;
-  height: 3.33rem;
-  border-radius: 0 0 var(--n-bradius) var(--n-bradius);
+  width: 4rem;
+  height: 4rem;
+  border-radius: var(--n-bradius) 0 0 0;
   padding: 0.5em;
   background-color: var(--c-secondary);
-  box-shadow: 0 0.5em 0.5em #62708540;
+  box-shadow: 0 -0.5em 1em #62708540;
 }
 
 /* @media (max-width: 768px) {
@@ -83,6 +87,7 @@
 
 .ui-container.dashboard {
   font-size: small;
+  font-family: "Lato", Arial, sans-serif;
 }
 
 .ui-container.dashboard button {
@@ -114,26 +119,45 @@
 
 .ui-container.dashboard > .content > * {
   flex: 1 1 30%;
-  padding: 0.25em;
+  padding: 1em;
   margin: 0;
 }
 
-.ui-container.dashboard .title {
-  font-variant-caps: all-small-caps;
-  text-align: center;
+.ui-container.dashboard > .content > div > .title {
+  text-transform: unset;
+  font-weight: bold;
+  /* text-align: center; */
   padding-bottom: 0.5em;
   margin-bottom: 0.75em;
   border-bottom: 0.1em solid var(--c-sub);
 }
 
-.ui-container.dashboard > .content .dataless-step {
+.ui-container.dashboard > .content > div > .title > * {
+  display: inline-block;
+}
+
+.ui-container.dashboard > .content > div > .title > .number {
+  text-align: center;
+  color: var(--c-sub);
+  border: 0.1em solid var(--c-sub);
+  border-radius: 100%;
+  width: 1.5em;
+  height: 1.5em;
+  line-height: 1.4em;
+  padding: 0em;
+  margin: 0 1em;
+}
+
+.ui-container.dashboard .leaves > .content,
+.ui-container.dashboard .cbds > .content {
   text-align: right;
   margin: 0;
   padding: 0;
   width: 100%;
 }
 
-.ui-container.dashboard > .content .dataless-step > * {
+.ui-container.dashboard .leaves > .content > *,
+.ui-container.dashboard .cbds > .content > * {
   display: flex;
   flex-direction: row;
   padding: 0.25em;
@@ -149,18 +173,71 @@
 }
 
 .ui-container.dashboard .leaves .content *[title] > *,
-.ui-container.dashboard .cbds .content *[title] > *,
-.ui-container.dashboard .segments .content *[title] > * {
+.ui-container.dashboard .cbds .content *[title] > * {
   flex: 0 1 50%;
   text-align: left;
 }
 
 .ui-container.dashboard .leaves .content *[title] > *:first-child,
-.ui-container.dashboard .cbds .content *[title] > *:first-child,
-.ui-container.dashboard .segments .content *[title] > *:first-child {
+.ui-container.dashboard .cbds .content *[title] > *:first-child {
   color: var(--c-sub);
   text-align: right;
   padding-right: 0.5em;
+}
+
+/* ----------------------- */
+
+.ui-container.dashboard .content > div.segments {
+  background: var(--c-sub-sub);
+}
+
+.ui-container.dashboard .content > div.segments > .title {
+  border: none;
+}
+
+.ui-container.dashboard .content > div.segments > .content {
+  display: flex;
+  align-items: stretch;
+  flex-flow: column;
+}
+
+.ui-container.dashboard .segment {
+  display: flex;
+  flex-direction: row;
+  margin: 0.25em;
+  padding: 0.5em 0.75em;
+  border-radius: var(--n-bradius);
+  background: var(--c-accent2);
+  color: var(--c-main);
+  text-transform: capitalize;
+}
+
+.ui-container.dashboard .segment.active {
+  background: var(--c-accent);
+  color: var(--c-secondary);
+}
+
+.ui-container.dashboard .segment > div {
+  padding: 0.25em;
+}
+
+.ui-container.dashboard .segment .icon {
+  padding: 0.25em;
+  width: 3em;
+  height: 3em;
+  filter: brightness(5);
+}
+.ui-container.dashboard .segment.active .icon {
+  filter: brightness(10);
+}
+
+.ui-container.dashboard .segment .title {
+  font-weight: bold;
+}
+
+.ui-container.dashboard .segment .description {
+  opacity: 0.5;
+  font-size: small;
 }
 
 /* ======================= */
@@ -209,7 +286,7 @@
   position: absolute;
   /* width: from JS, style */
   height: 100%;
-  border-right: calc(var(--thick) * 1.5) solid var(--c-main);
+  border-right: calc(var(--thick) * 1.5) solid var(--c-accent);
   display: flex;
   align-items: center;
   transition: width ease-out var(--t-transition);
@@ -220,11 +297,12 @@
   display: block;
   width: 100%;
   height: calc(var(--thick) * 1.5);
-  background: var(--c-main);
+  background: var(--c-accent);
   filter: opacity(75%);
 }
 
 /* ----------------------- */
+
 .ui-container.dashboard .sparkline.sparkhistogram .columns {
   display: flex;
   height: 100%;
@@ -237,13 +315,14 @@
 .ui-container.dashboard .sparkline.sparkhistogram .column {
   flex: 1 1 auto;
   margin-left: var(--thick);
-  background: var(--c-main);
+  background: var(--c-accent);
   transition: height ease-out var(--t-transition);
   margin-top: -0.1em;
+  border-radius: 0.2em;
 }
+
 /* ======================= */
 
-.ui-container.dashboard > .controls {
-  /* https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout/Aligning_Items_in_a_Flex_Container#Using_auto_margins_for_main_axis_alignment */
-  margin-top: auto;
+.ui-container .ui-footer {
+  padding: 1em;
 }
