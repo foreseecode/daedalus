@@ -7,7 +7,7 @@
     "mongod": "mongod --config mongodb/mongod.conf --auth",
     "start": "node server.js",
     "dev": "nodemon --exec \"clear && node server.js\"",
-    "push": "git branch -D gh-pages && git push && git subtree push --prefix web origin gh-pages"
+    "push": "git push && git subtree push --prefix web origin gh-pages"
   },
   "repository": {
     "type": "git",
