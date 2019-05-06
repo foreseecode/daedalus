@@ -3,8 +3,7 @@ import htm from "../asset/htm.mjs";
 // https://github.com/developit/preact/search?utf8=%E2%9C%93&q=htm&type=
 const h = htm.bind(hPreact);
 
-import { SparkRuler, SparkHistogram } from "./sparklines.mjs";
-import { Guide } from "./guide.mjs";
+import { SparkGauge, SparkHistogram } from "./sparklines.mjs";
 
 const DOM_ROOT = document.querySelector(".ui-container");
 
@@ -37,13 +36,7 @@ class UI extends Component {
           src="asset/daedalus.svg"
           onclick=${e =>
             e.shiftKey
-              ? this.setState(
-                  setAppUIState(
-                    Object.assign(state, {
-                      mode: state.mode === "guide" ? "dashboard" : "guide"
-                    })
-                  )
-                )
+              ? this.setState(setAppUIState(state))
               : this.setState(
                   setAppUIState(
                     Object.assign(state, {
@@ -53,19 +46,17 @@ class UI extends Component {
                 )}
           />
 
-        ${state.visible &&
-          state.mode === "dashboard" &&
-          renderUIContent({ appConfig, appState })}
+        ${
+          state.visible
+            ? renderUIContent({ appConfig, appState })
+            : h`<div class="content" />`
+        }
 
-        ${state.visible &&
-          state.mode === "dashboard" &&
-          renderUIControls({ appConfig, appState })}
-
-        ${state.visible &&
-          state.mode === "guide" &&
-          h`<${Guide}
-           config=${appConfig.ui.guide}
-          />`}
+        ${
+          state.visible
+            ? renderUIControls({ appConfig, appState })
+            : h`<div class="control" />`
+        }
       </div>
     `;
   }
@@ -111,15 +102,18 @@ function renderUIContent({ appConfig, appState }) {
   // ----
 
   return h`<div class="content">
+
     <div class="leaves">
       <div class="title">
-        <span class="number">1</span>
-        <span>User activity</span>
+        <div class="number"><div>1</div></div>
+        <div>User activity</div>
       </div>
+
       <ul class="content">
         <li title="page views">
-          <div>pv ${nbPageViews}:</div>
-          <${SparkRuler}
+          <div class="sub">Page views</div>
+          <div class="activity-count">${nbPageViews}</div>
+          <${SparkGauge}
             grades=${[
               appConfig.CBD.fidelityThreshold,
               appConfig.CBD.fidelityThreshold,
@@ -129,42 +123,56 @@ function renderUIContent({ appConfig, appState }) {
           />
         </li>
         <li title="click bursts">
-          <div>${
-            maxNbClicks ? clickBursts[maxNbClicks] + "x" + maxNbClicks : "cb"
-          }:
+          <div class="sub">Clicks</div>
+          <div class="activity-data">
+            <div class="activity-count">∞</div>
+            <${SparkHistogram} columns=${clickBursts} />
           </div>
-          <${SparkHistogram} columns=${clickBursts} />
         </li>
         <li title="scroll bursts">
-          <div>${scrollBursts.length} sb:
+          <div class="sub">Scrolls</div>
+          <div class="activity-data">
+            <div class="activity-count">∞</div>
+            <${SparkHistogram} columns=${scrollBursts} />
           </div>
-          <${SparkHistogram} columns=${scrollBursts} />
         </li>
       </ul>
     </div>
+
     <div class="cbds">
       <div class="title">
-        <span class="number">2</span>
-        <span>Dimensions</span>
+        <div class="number"><div>2</div></div>
+        <div>Dimensions</div>
       </div>
+
       <div class="content">
-        <div title="fidelity">
-          <div>fidelity:</div>
-          <div>${appState.CBD["fidelity"] || "∅"}</div>
+        <div>
+          <div class="sub" style="margin-left: 0.5em;">Engagement</div>
+          <div class="cbd-list">${appConfig.CBD["fidelity"].map(
+            c =>
+              h`<span class=${"cbd-value" +
+                (c == appState.CBD["fidelity"] ? " active" : "")}>${c}</span>`
+          )}</div>
         </div>
-        <div title="rage">
-          <div>rage:</div>
-          <div>${appState.CBD["rage"] || "∅"}</div>
+        <div>
+          <div class="sub" style="margin-left: 0.5em;">Behaviour</div>
+          <div class="cbd-list">${appConfig.CBD["rage"].map(
+            c =>
+              h`<span class=${"cbd-value" +
+                (c == appState.CBD["rage"] ? " active" : "")}>${c}</span>`
+          )}</div>
         </div>
       </div>
     </div>
+
     <div class="segments">
       <div class="title">Personas</div>
+
       <div class="content">
         ${Object.keys(appConfig.segmentsOfInterest).map(
           title =>
             h`<span
-                class=${`segment ${title === appState.segment && "active"}`}
+                class=${`segment ${title === appState.segment ? "active" : ""}`}
               >
               <img class="icon" src="../asset/user.svg" />
               <div>
@@ -179,20 +187,19 @@ function renderUIContent({ appConfig, appState }) {
         )}
       </div>
     </div>
+
   </div>`;
 }
 
 function renderUIControls({ appConfig, appState }) {
-  return h`<div class="ui-footer">
-    <button onclick=${FSR.clearState}>clear</button>
+  return h`<div class="control">
+    <button class="clear" onclick=${FSR.clearState}>clear</button>
+    <a class="read-more" href="#">Read more</a>
   </div>`;
 }
 
 function initData() {
-  return {
-    mode: "dashboard", // "guide"
-    visible: true
-  };
+  return { visible: true };
 }
 
 export { update, initData };
