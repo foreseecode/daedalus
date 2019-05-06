@@ -194,7 +194,7 @@ function renderUIContent({ appConfig, appState }) {
 function renderUIControls({ appConfig, appState }) {
   return h`<div class="control">
     <button class="clear" onclick=${FSR.clearState}>clear</button>
-    <a class="read-more" href="#">Read more</a>
+    <a class="read-more" href="ReadMore.html">Read more</a>
   </div>`;
 }
 

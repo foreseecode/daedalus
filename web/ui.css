@@ -48,7 +48,8 @@
   color: var(--c-main);
   background-color: var(--c-secondary);
   border: .1em solid var(--c-sub);
-  border-style: solid none none none;
+  border-style: solid none none solid;
+  border-radius: var(--s-bradius);
   display: flex;
   flex-direction: column;
   font-size: small;
@@ -71,7 +72,7 @@
   height: 4rem;
   border:  .1em solid var(--c-sub);
   border-style: solid none none solid;
-  /* border-radius: var(--s-bradius) 0 0 0; */
+  border-radius: var(--s-bradius) 0 0 0;
   padding: 0.5em;
   background-color: var(--c-secondary);
   box-shadow: 0 -0.5em 1em #62708540;

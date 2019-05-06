@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+
+<html class="fa-events-icons-ready" lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="content-language" content="en-us" />
+
+    <base href="./" />
+
+    <title>Berkshire &amp; Nash</title>
+
+    <link
+      rel="stylesheet"
+      type="text/css"
+      rel="icon"
+      type="image/png"
+      href="asset/daedalus.png"
+      sizes="32x32"
+    />
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    <style>
+      :root {
+        --c-main: #222;
+        --c-sub: #c0c0c0;
+        --c-sub-sub: #f7f7f7;
+        --c-secondary: #fefefe;
+        --c-accent: #1181ff;
+        --c-accent2: #e4f0fe;
+        --c-success: #11e111;
+        --c-warning: #f8de00;
+        --c-failure: #f12330;
+      }
+      body {
+        margin: 0;
+        height: 100vh;
+      }
+      .title {
+        height: 2.5em;
+        padding: 1em;
+        color: #fff;
+        background: #1181ff;
+        box-shadow: 0 0.25em 0.5em #ddd;
+      }
+      .title .text {
+        padding: 0.5em;
+        font-size: xx-large;
+      }
+      .title .white-paper {
+        display: inline-block;
+        color: #1181ff;
+        background: #fff;
+        padding: 0.5em;
+        margin-left: 2em;
+        border-radius: 0.5em;
+      }
+      .paper-content {
+        height: calc(100vh - 2.5em - 2em);
+        overflow: auto;
+      }
+      section {
+        display: flex;
+        flex-flow: column nowrap;
+      }
+      section .content {
+        display: flex;
+        flex-flow: row wrap;
+      }
+      section .content .text {
+        flex: 3;
+        min-width: 600px;
+      }
+      section .content .pict {
+        flex: 1;
+      }
+      section .content .pict img {
+        max-width: 600px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="title">
+      <span class="text">Daedalus - A GDPR Compliant Data-Less CX Tracker</span>
+      <a class="white-paper" href="asset/White Paper.pdf">📄 white paper</a>
+    </div>
+
+    <div class="paper-content">
+      <section>
+        <h3>A Changing Climate in Data Privacy</h3>
+
+        <div class="content">
+          <div class="text">
+            <p>
+              Online privacy concerns have hit the mainstream media. These
+              reports are impacting major policy changes like GDPR, and the
+              public perception of data tracking & privacy. We believe the
+              uptrend in users opting-in to use new tools to block trackers
+              ensuring data privacy and protection will continue and will have
+              significant implications for the web analytics & tracking
+              business. We have created a data-less tracker that won't be
+              blocked by browsers or filter lists and is 100% GDPR compliant.
+            </p>
+
+            <p>
+              Go Here for a live Demo of the DaedalusTracker: www.daedalus.live
+            </p>
+          </div>
+          <div class="pict">
+            <img src="asset/DaedKeyFeature1.jpg" alt="Data privacy awareness" />
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h3>Data Captured vs Data Transferred</h3>
+
+        <div class="content">
+          <div class="text">
+            <p>
+              We observe all user activity within the browser. Clicks, mouse
+              moves, text typed, forms submitted, items bought.
+            </p>
+
+            <p>
+              Deploying TenserFlow Light within the tracker allows the tracker
+              to use AI & ML models to interpret user actions and patterns in
+              real time to define user behaviors.
+            </p>
+
+            <p>
+              The tracker only sends aggregated, and computed data about a user
+              observed within the browser, the Persona. No raw user data or IDs
+              are sent and saved on a server.
+            </p>
+          </div>
+          <div class="pict">
+            <img src="asset/DaedKeyFeature2.jpg" alt="Data transfers" />
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h3>Personas with Behavioral Context</h3>
+
+        <div class="content">
+          <div class="text">
+            <p>
+              The personas are built from the many combined permutations of the
+              user behaviors, or dimensions. Configuring these personas would be
+              available for clients.
+            </p>
+
+            <p>
+              On the server side, and within the CXSuite a persona can be
+              enumerated or aggregated to enrich analysis across the CXSuite
+              features set.
+            </p>
+          </div>
+          <div class="pict">
+            <img src="asset/DaedKeyFeature3.jpg" alt="Personas gathering" />
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h3>Acting on Personas in Real-Time</h3>
+
+        <div class="content">
+          <div class="text">
+            <p>
+              Active personas are sent to the server and reported on in the
+              CXSuite in real-time.
+            </p>
+
+            <p>
+              The stream of personas can control the deployment of Contextual
+              Surveys, allowing for more engaging real-time interactions with
+              users.
+            </p>
+          </div>
+          <div class="pict">
+            <img src="asset/DaedKeyFeature4.png" alt="Personas analytics" />
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>
