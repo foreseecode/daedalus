@@ -199,7 +199,7 @@ function renderUIControls({ appConfig, appState }) {
 }
 
 function initData() {
-  return { visible: true };
+  return { visible: false };
 }
 
 export { update, initData };
