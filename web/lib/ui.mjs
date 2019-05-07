@@ -21,7 +21,7 @@ class UI extends Component {
   }
 
   render({ appConfig, appState }, state) {
-    console.log("Rendering", { appConfig, appState }, state, appState.segment);
+    console.log("Rendering", { appConfig, appState }, state, appState.persona);
 
     // todo: clean up
     Object.assign(state, appState.ui);
@@ -73,16 +73,18 @@ function renderUIContent({ appConfig, appState }) {
   // Concatenate clickBursts of all pages
   const clickBursts = appState.leaf.pages.reduce((sum, p) => {
     Object.keys(p.mouse.clickBursts).forEach(nbClicks => {
-      sum[nbClicks] = (sum[nbClicks] || 0) + p.mouse.clickBursts[nbClicks];
+      sum[nbClicks] =
+        (sum[nbClicks] || 0) +
+        p.mouse.clickBursts[nbClicks] * (nbClicks * 1 || 1);
     });
     return sum;
   }, {});
-  const maxNbClicks = Math.max(0, ...Object.keys(clickBursts));
+  const nbClicks = Object.values(clickBursts).reduce(
+    (sum, item) => sum + item,
+    0
+  );
   // Make sure to have a minimum of columns to show
-  for (let i = 1, id; i < 4; i++) {
-    id = i * appConfig.CBD.clickBurstThreshold;
-    clickBursts[id] = clickBursts[id] || 0;
-  }
+  for (let i = 0; i < 3; i++) clickBursts[i] = clickBursts[i] || 0;
   // ----
 
   // ----
@@ -94,11 +96,12 @@ function renderUIContent({ appConfig, appState }) {
     });
     return sum;
   }, {});
+  const nbScrolls = Object.values(scrollBursts).reduce(
+    (sum, item) => sum + item,
+    0
+  );
   // Make sure to have a minimum of columns to show
-  for (let i = 1, id; i < 4; i++) {
-    id = i * appConfig.CBD.scrollBurstThreshold;
-    scrollBursts[id] = scrollBursts[id] || 0;
-  }
+  for (let i = 0; i < 3; i++) scrollBursts[i] = scrollBursts[i] || 0;
   // ----
 
   return h`<div class="content">
@@ -125,14 +128,14 @@ function renderUIContent({ appConfig, appState }) {
         <li title="click bursts">
           <div class="sub">Clicks</div>
           <div class="activity-data">
-            <div class="activity-count">∞</div>
+            <div class="activity-count">${nbClicks}</div>
             <${SparkHistogram} columns=${clickBursts} />
           </div>
         </li>
         <li title="scroll bursts">
           <div class="sub">Scrolls</div>
           <div class="activity-data">
-            <div class="activity-count">∞</div>
+            <div class="activity-count">${nbScrolls}</div>
             <${SparkHistogram} columns=${scrollBursts} />
           </div>
         </li>
@@ -165,14 +168,17 @@ function renderUIContent({ appConfig, appState }) {
       </div>
     </div>
 
-    <div class="segments">
-      <div class="title">Personas</div>
+    <div class="personas">
+      <div class="title">
+        <div class="number"><div>3</div></div>
+        <div>Personas</div>
+      </div>
 
       <div class="content">
         ${Object.keys(appConfig.segmentsOfInterest).map(
           title =>
             h`<span
-                class=${`segment ${title === appState.segment ? "active" : ""}`}
+                class=${`persona ${title === appState.persona ? "active" : ""}`}
               >
               <img class="icon" src="asset/user.svg" />
               <div>
@@ -199,7 +205,7 @@ function renderUIControls({ appConfig, appState }) {
 }
 
 function initData() {
-  return { visible: false };
+  return { visible: true };
 }
 
 export { update, initData };

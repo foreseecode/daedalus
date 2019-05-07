@@ -62,9 +62,7 @@ function SparkHistogram({ children, ...props }) {
   return h`<div class="sparkline sparkhistogram">
     <div class="columns">
       ${Object.keys(columns).map(label => {
-        return h`<span class="column" title=${`${
-          columns[label]
-        }x${label}`} style=${{
+        return h`<span class="column" style=${{
           height: (columns[label] / maxValue) * 100 + "%"
         }}></span>`;
       })}

@@ -52,7 +52,7 @@ const addDurationPageView = page => {
 // Mouse
 
 function watchClicks() {
-  const burstThreshold = getConfig().CBD.clickBurstThreshold;
+  const burstThresholds = getConfig().CBD.clickBurstThresholds;
   let burstTimeout = null;
   // number of clicks in the current burst
   let burstLength = 0;
@@ -60,8 +60,9 @@ function watchClicks() {
   let _clickBursts, _burstIndex, _i;
 
   const burstDetector = e => {
+    burstLength++;
+
     if (burstTimeout) {
-      burstLength++;
       // reset timeout to get a sequence (burst) of clicks
       clearTimeout(burstTimeout);
     }
@@ -70,23 +71,34 @@ function watchClicks() {
     burstTimeout = setTimeout(() => {
       // end of burst
 
-      // Less than threshold is not interesting
-      if (burstLength >= burstThreshold) {
-        _clickBursts = getCurrentPage().mouse.clickBursts;
+      _clickBursts = getCurrentPage().mouse.clickBursts;
 
-        _burstIndex = burstLength - (burstLength % burstThreshold);
-
-        // avoid gaps for better rendering
-        for (_i = burstThreshold; _i <= _burstIndex; _i += burstThreshold) {
-          _clickBursts[_i] = _clickBursts[_i] || 0;
+      // check for dead zone
+      if (burstLength < burstThresholds[0]) {
+        _burstIndex = 0;
+      } else if (burstLength > burstThresholds[burstThresholds.length - 1]) {
+        // check if it's after the last threshold
+        _burstIndex = burstThresholds.length - 1;
+      } else {
+        // check between which thresholds it fits
+        for (_i = 0; _i < burstThresholds.length; _i++) {
+          if (
+            burstLength >= burstThresholds[_i] &&
+            burstLength < burstThresholds[_i + 1]
+          ) {
+            // +1 because 0 is the dead zone
+            _burstIndex = _i + 1;
+            break;
+          }
         }
-
-        _clickBursts[_burstIndex] = _clickBursts[_burstIndex] + 1;
-
-        saveState();
       }
 
-      // cleanup as this burst is over
+      _clickBursts[_burstIndex] =
+        (_clickBursts[_burstIndex] || 0) + burstLength;
+
+      saveState();
+
+      // cleanup now that this burst is over
       burstLength = 0;
     }, getConfig().CBD.clickBurstDuration);
   };
@@ -96,14 +108,14 @@ function watchClicks() {
 }
 
 function watchScrolls() {
-  const burstThreshold = getConfig().CBD.scrollBurstThreshold;
+  const burstThresholds = getConfig().CBD.scrollBurstThresholds;
   let burstTimeout = null;
   // number of scroll in the current burst
   let burstLength = 0;
 
   let lastScrollTop, lastDirection;
 
-  let _thisScrollTop, _thisDirection, _hasDirectionChanged;
+  let _thisScrollTop, _thisDirection, _hasDirectionChanged, _burstIndex, _i;
 
   const burstDetector = e => {
     _thisScrollTop = document.scrollingElement.scrollTop;
@@ -125,18 +137,33 @@ function watchScrolls() {
     // prepare for end of burst
     burstTimeout = setTimeout(() => {
       // end of burst
+      const scrollBursts = getCurrentPage().mouse.scrollBursts;
 
-      // Less than threshold is not interesting
-      if (burstLength >= burstThreshold) {
-        const scrollBursts = getCurrentPage().mouse.scrollBursts;
-        const burstIndex = burstLength - (burstLength % burstThreshold);
-        // avoid gaps for better rendering
-        for (let i = burstThreshold; i <= burstIndex; i += burstThreshold) {
-          scrollBursts[i] = scrollBursts[i] || 0;
+      // check for dead zone
+      if (burstLength < burstThresholds[0]) {
+        _burstIndex = 0;
+      } else if (burstLength > burstThresholds[burstThresholds.length - 1]) {
+        // check if it's after the last threshold
+        _burstIndex = burstThresholds.length - 1;
+      } else {
+        // check between which thresholds it fits
+        for (_i = 0; _i < burstThresholds.length; _i++) {
+          if (
+            burstLength >= burstThresholds[_i] &&
+            burstLength < burstThresholds[_i + 1]
+          ) {
+            // +1 because 0 is the dead zone
+            _burstIndex = _i + 1;
+            break;
+          }
         }
-        scrollBursts[burstIndex] = scrollBursts[burstIndex] + 1;
-        saveState();
       }
+
+      scrollBursts[_burstIndex] =
+        (scrollBursts[_burstIndex] || 0) + burstLength;
+
+      saveState();
+
       // cleanup as this burst is over
       burstLength = 0;
       lastDirection = null;

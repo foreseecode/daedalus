@@ -15,8 +15,10 @@ const config = Object.freeze({
   CBD: Object.freeze({
     // How long between two clicks to be part of a burst?
     clickBurstDuration: 500,
-    // How many clicks in a burst to be considered?
-    clickBurstThreshold: 3,
+    // bursts buckets boundaries: the first one is a dead-zone
+    // clickBurstThresholds: [a, b, c],
+    // -∞ ⟶ a-1 | a ⟶ b-1 | b ⟶ c-1 | c ⟶ ∞
+    clickBurstThresholds: [3, 6, 12],
     // associated w clickBurstThreshold:
     // If any of rageBurst never reached more than the threshold,
     // rage[0] is on.
@@ -27,7 +29,7 @@ const config = Object.freeze({
     // How long between scroll direction changes to be part of a burst?
     scrollBurstDuration: 500,
     // similar to clickBursts, about scroll direction changes
-    scrollBurstThreshold: 3,
+    scrollBurstThresholds: [3, 5, 10],
 
     // How many page views
     fidelityThreshold: 4,
@@ -37,7 +39,7 @@ const config = Object.freeze({
     satisfaction: ["toxic", "neutral"]
   }),
 
-  // Possible segments to fit
+  // Possible personas to fit
   segmentsOfInterest: {
     sloth: {
       fidelity: "occasional",
@@ -53,7 +55,7 @@ const config = Object.freeze({
     }
   },
 
-  ui: { visible: false }
+  ui: { visible: true }
 });
 
 const getConfig = () => config;
@@ -68,7 +70,7 @@ const getDefaultState = () => ({
 });
 
 let state = (() => {
-  let initialState = JSON.parse(localStorage.getItem("daedalus") || {});
+  let initialState = JSON.parse(localStorage.getItem("daedalus") || "null");
 
   // Erase state if it is too old
   if (
@@ -137,15 +139,15 @@ const getCBDs = () => {
 };
 
 const getSegment = () => {
-  state.segment =
+  state.persona =
     Object.keys(config.segmentsOfInterest).find(segmentTitle => {
-      const segment = config.segmentsOfInterest[segmentTitle];
-      return Object.keys(segment).every(
-        CBDName => segment[CBDName] == state.CBD[CBDName]
+      const persona = config.segmentsOfInterest[segmentTitle];
+      return Object.keys(persona).every(
+        CBDName => persona[CBDName] == state.CBD[CBDName]
       );
     }) || "∅";
 
-  return state.segment;
+  return state.persona;
 };
 
 //========
@@ -159,9 +161,9 @@ window.FSR = { getState: () => state, getCBDs, getSegment, clearState };
 //   POSTSegments(getSegment());
 // });
 
-function POSTSegments(segments) {
+function POSTSegments(personas) {
   let pp = state.postedSegments;
-  let segmentsToSend = segments.filter(p => !pp.includes(p));
+  let segmentsToSend = personas.filter(p => !pp.includes(p));
 
   if (!segmentsToSend.length) return;
 
@@ -174,7 +176,7 @@ function POSTSegments(segments) {
       Accept: "application/json",
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({ segment: segments[0] })
+    body: JSON.stringify({ persona: personas[0] })
   });
 }
 

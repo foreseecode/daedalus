@@ -32,15 +32,15 @@ app.options("/data", (req, res, next) => {
 
 app.post("/data", async (req, res) => {
   try {
-    const segment = req.body.segment;
-    await mongoClient.insertDocuments([{ segment }]);
-    res.send({ segment });
+    const persona = req.body.persona;
+    await mongoClient.insertDocuments([{ persona }]);
+    res.send({ persona });
   } catch (error) {
     res.sendStatus(500);
   }
 });
 
-app.get("/segments", async (req, res) => {
+app.get("/personas", async (req, res) => {
   const data = await mongoClient.findDocuments();
   res.contentType("application/json");
   res.send(data);
