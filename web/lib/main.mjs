@@ -1,6 +1,6 @@
 import * as leaf from "./leaf.mjs";
 import * as CBD from "./cbd.mjs";
-// import { getToxicity } from "./toxicity.mjs";
+// import * as sentiment from "./tensorflow/sentiment.mjs";
 
 import * as ui from "./ui.mjs";
 
@@ -14,7 +14,7 @@ const STATE_VALIDITY_TIME = 1000 * 60 * 60 * 3;
 const config = Object.freeze({
   CBD: Object.freeze({
     // How long between two clicks to be part of a burst?
-    clickBurstDuration: 500,
+    clickBurstDuration: 400,
     // bursts buckets boundaries: the first one is a dead-zone
     // clickBurstThresholds: [a, b, c],
     // -∞ ⟶ a-1 | a ⟶ b-1 | b ⟶ c-1 | c ⟶ ∞
@@ -27,7 +27,7 @@ const config = Object.freeze({
     rage: ["normal", "sparse", "rage"],
 
     // How long between scroll direction changes to be part of a burst?
-    scrollBurstDuration: 500,
+    scrollBurstDuration: 400,
     // similar to clickBursts, about scroll direction changes
     scrollBurstThresholds: [3, 5, 10],
 
