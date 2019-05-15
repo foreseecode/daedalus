@@ -5,7 +5,7 @@
   --s-bradius: 0.2em;
   --s-bradius2: 1.5em;
   --t-transition: 150ms;
-  --s-height: 45em;
+  --s-height: 43em;
   --s-padding: 1em;
 }
 
@@ -39,7 +39,7 @@
   width: 100%;
   max-width: 64em;
   height: calc(var(--s-height));
-  bottom: 0;
+  bottom: 0em;
   right: 0;
   transform: translateY(var(--s-height));
   transition-property: transform, box-shadow;
@@ -66,7 +66,7 @@
 .ui-container .hanger {
   z-index: 98;
   position: absolute;
-  bottom: calc(100% - 0.1em);
+  bottom: 99.9%;
   right: 0;
   width: 4rem;
   height: 4rem;
@@ -81,6 +81,7 @@
 /* ----------------------- */
 
 .ui-container button {
+  margin: var(--s-padding);
   padding: 0.25em 0.75em;
   background: inherit;
   color: var(--c-main);
@@ -423,6 +424,7 @@
 
 .ui-container a.read-more {
   font-variant-caps: all-small-caps;
+  margin: var(--s-padding);
 }
 
 /* ======================= */
