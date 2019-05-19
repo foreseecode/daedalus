@@ -167,6 +167,7 @@
 /* ----------------------- */
 .ui-container > .content > div > .content > * {
   margin: 0.5em;
+  height: 4.5em;
 }
 
 .ui-container .leaves .content .activity-count,
@@ -210,12 +211,14 @@
   padding: 0.5em;
   margin: 0.25em;
   text-transform: capitalize;
+  text-align: center;
   z-index: -1;
 }
 
 .ui-container .cbds .cbd-list .cbd-value .avatar {
   padding: 0;
   height: 1.25em;
+  float: none;
 }
 
 .ui-container .cbds .cbd-list .cbd-value.active {
