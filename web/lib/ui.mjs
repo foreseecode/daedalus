@@ -58,6 +58,18 @@ class UI extends Component {
       </div>
     `;
   }
+
+  componentDidUpdate(props, state) {
+    setTimeout(() => {
+      // Bring any active CBD into view
+      this.base
+        .querySelectorAll(`.cbds .content .cbd-list > .cbd-value.active`)
+        .forEach(el => {
+          console.log(`scrollIntoView`, el);
+          el.scrollIntoView({ behavior: "smooth", inline: "center" });
+        });
+    }, 10);
+  }
 }
 
 function renderUIContent({ appConfig, appState }) {
@@ -134,14 +146,14 @@ function renderUIContent({ appConfig, appState }) {
           </div>
         </li>
         <li title="click bursts">
-          <div class="sub">Clicks</div>
+          <div class="sub">Clicks<span style="float:right">&amp; bursts</span></div>
           <div class="activity-data">
             <div class="activity-count">${nbClicks}</div>
             <${SparkHistogram} columns=${clickBursts} />
           </div>
         </li>
         <li title="scroll bursts">
-          <div class="sub">Scrolls</div>
+          <div class="sub">Scrolls<span style="float:right">&amp; bursts</span></div>
           <div class="activity-data">
             <div class="activity-count">${nbScrolls}</div>
             <${SparkHistogram} columns=${scrollBursts} />

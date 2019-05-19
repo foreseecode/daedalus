@@ -120,21 +120,29 @@ function watchScrolls() {
   const burstDetector = e => {
     _thisScrollTop = document.scrollingElement.scrollTop;
     _thisDirection = lastScrollTop - _thisScrollTop > 0 ? 1 : -1;
-    _hasDirectionChanged = lastDirection
-      ? _thisDirection !== lastDirection
-      : false;
+    _hasDirectionChanged =
+      lastScrollTop && lastDirection ? _thisDirection !== lastDirection : true;
+
+    console.log({
+      lastScrollTop,
+      _thisScrollTop,
+      lastDirection,
+      _thisDirection,
+      _hasDirectionChanged,
+      burstLength,
+      burstTimeout
+    });
 
     lastScrollTop = _thisScrollTop;
     lastDirection = _thisDirection;
 
-    if (!_hasDirectionChanged) return;
-
     // A burst already started
-    if (burstTimeout) {
+    if (burstTimeout && _hasDirectionChanged) {
       burstLength++;
       // reset timeout to get a sequence (burst) of scroll direction changes
-      clearTimeout(burstTimeout);
     }
+
+    clearTimeout(burstTimeout);
 
     // prepare for end of burst
     burstTimeout = setTimeout(() => {
@@ -167,6 +175,7 @@ function watchScrolls() {
       saveState();
 
       // cleanup as this burst is over
+      burstTimeout = null;
       burstLength = 0;
       lastDirection = null;
       lastScrollTop = null;
