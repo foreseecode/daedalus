@@ -1,16 +1,17 @@
 ::-webkit-scrollbar {
   display: none;
 }
+
 .ui-container {
-  --s-bradius: 0.2em;
+  --s-bradius: 0.75em;
   --s-bradius2: 1.5em;
   --t-transition: 150ms;
   --s-height: 43em;
-  --s-padding: 1em;
+  --s-padding: 0.5em;
 }
 
 .ui-container.theme-a {
-  --c-main: #222;
+  --c-main: #333;
   --c-sub: #c0c0c0;
   --c-sub-sub: #f7f7f7;
   --c-secondary: #fefefe;
@@ -49,7 +50,6 @@
   background-color: var(--c-secondary);
   border: 0.1em solid var(--c-sub);
   border-style: solid none none solid;
-  border-radius: var(--s-bradius);
   display: flex;
   flex-flow: column;
   font-size: small;
@@ -60,7 +60,7 @@
 
 .ui-container[visible] {
   transform: translateY(-1 * calc(var(--s-height) + 2 * var(--s-padding)));
-  box-shadow: 0 -0.5em 1em #62708540;
+  box-shadow: 0 -0.5em 0.5em -0.3em #62708540;
 }
 
 .ui-container .hanger {
@@ -68,18 +68,18 @@
   position: absolute;
   bottom: 99.9%;
   right: 0;
-  width: 4rem;
-  height: 4rem;
-  border: 0.1em solid var(--c-sub);
-  border-style: solid none none solid;
+  width: 4.2rem;
+  height: 3.4rem;
+  /* border: 0.1em solid var(--c-sub); */
+  /* border: none; */
+  /* border-style: solid none none solid; */
   border-radius: var(--s-bradius) 0 0 0;
-  padding: 0.5em;
+  padding: 0.7em 0.4em 0.3em 0.4em;
   background-color: var(--c-secondary);
-  box-shadow: 0 -0.5em 1em #62708540;
+  box-shadow: -0.4em -0.4em 0.5em -0.3em #62708540;
 }
 
 /* ----------------------- */
-
 .ui-container button {
   margin: var(--s-padding);
   padding: 0.25em 0.75em;
@@ -89,6 +89,7 @@
   border-radius: var(--s-bradius);
   transition: none;
 }
+
 .ui-container button:active {
   color: var(--c-accent);
   border-color: var(--c-accent);
@@ -108,9 +109,8 @@
 }
 
 /* ----------------------- */
-
 .ui-container > .content {
-  flex: 1 1 auto;
+  flex: 0 1 auto;
   overflow: hidden;
   justify-content: flex-end;
   display: flex;
@@ -118,13 +118,12 @@
 }
 
 /* ======================= */
-
 .ui-container .leaves,
 .ui-container .cbds,
 .ui-container .personas {
   flex: 1 1 30%;
   overflow: hidden;
-  padding: var(--s-padding);
+  padding: 0 var(--s-padding);
 }
 
 @media (max-width: 333px) {
@@ -135,15 +134,13 @@
 }
 
 /* ----------------------- */
-
 .ui-container > .content > div > .title {
   display: flex;
   flex-direction: row;
   text-transform: capitalize;
   font-weight: bold;
-  padding-bottom: 0.5em;
   margin-bottom: 0.75em;
-  border-bottom: 0.1em solid var(--c-sub);
+  border-bottom: 0.1em solid var(--c-sub-sub);
 }
 
 .ui-container > .content > div > .title > * {
@@ -168,39 +165,36 @@
 }
 
 /* ----------------------- */
-
 .ui-container > .content > div > .content > * {
-  margin: 1em 0.5em;
-  flex: 1 1 0;
+  margin: 0.5em;
 }
 
 .ui-container .leaves .content .activity-count,
 .ui-container .cbds .content .activity-count {
   font-size: large;
-  /* margin: 0.3em 0; */
 }
 
 /* ----------------------- */
-
 .ui-container .leaves .content {
   display: flex;
   flex-flow: column wrap;
   flex: 1 1 auto;
+  align-items: center;
 }
 
 .ui-container .leaves .activity-data {
   display: flex;
-}
-.ui-container .leaves .page-views .activity-data {
-  flex-direction: column;
 }
 
 .ui-container .leaves .activity-data > * {
   flex: 1 1 50%;
 }
 
-/* ----------------------- */
+.ui-container .leaves .activity-data > .sparkline {
+  flex: 1 2 auto;
+}
 
+/* ----------------------- */
 .ui-container .cbds .cbd-list {
   display: flex;
   flex-flow: row wrap;
@@ -208,10 +202,15 @@
 
 .ui-container .cbds .cbd-list .cbd-value {
   border: 0.1em solid var(--c-sub);
-  border-radius: var(--s-bradius2);
-  padding: 0.6em;
+  border-radius: var(--s-bradius);
+  padding: 0.5em;
   margin: 0.25em;
   text-transform: capitalize;
+}
+
+.ui-container .cbds .cbd-list .cbd-value .avatar {
+  padding: 0;
+  height: 1.25em;
 }
 
 .ui-container .cbds .cbd-list .cbd-value.active {
@@ -220,55 +219,59 @@
 }
 
 /* ----------------------- */
-
 .ui-container .personas {
   display: flex;
   flex-flow: column;
+  flex: 0 0 100%;
 }
 
 .ui-container .personas > .content {
-  flex: 1 1 auto;
-  /* justify-content: space-evenly; */
   display: flex;
-  align-items: stretch;
-  flex-flow: column;
-  overflow: auto;
+  flex-flow: row wrap;
+  justify-content: start;
 }
 
 .ui-container > .content > div > .content > .persona {
-  flex: 0 1 auto;
-  display: flex;
-  flex-direction: row;
-  padding: 0.5em 0.75em;
-  border-radius: var(--s-bradius2);
-  background: var(--c-accent2);
+  flex: 0 1 12em;
+  /* width: 45%; */
+  height: 3.4em;
+  display: inline-block;
+  overflow: hidden;
+  padding: 0.25em;
+  border: 0.1em solid var(--c-sub);
+  border-radius: var(--s-bradius);
   color: var(--c-main);
   text-transform: capitalize;
 }
 
-.ui-container .persona.active {
-  background: var(--c-accent);
-  color: var(--c-secondary);
+.ui-container > .content > div > .content > .persona.active {
+  color: var(--c-accent);
+  border-color: var(--c-accent);
 }
 
 .ui-container .persona > div {
-  padding: 0.25em;
+  padding: 0 0.25em;
+  display: inline-block;
 }
 
-.ui-container .persona .icon {
-  padding: 0.25em;
-  width: 3em;
+.avatar {
+  padding: 0 0.25em;
+  width: 2.75em;
   height: 3em;
-  filter: brightness(5);
+  float: left;
+  filter: brightness(0.8);
 }
-.ui-container .persona.active .icon {
-  filter: brightness(10);
+
+.ui-container .persona.active .avatar,
+.ui-container .cbds .cbd-list .cbd-value.active .avatar {
+  /* total hardcoded, poke & see values */
+  filter: contrast(0.9) hue-rotate(365deg) saturate(15) brightness(0.9);
 }
 
 @media (max-width: 333px) {
-  .ui-container .persona .icon {
+  /* .ui-container .persona .avatar {
     display: none;
-  }
+  } */
 }
 
 .ui-container .persona .title {
@@ -277,11 +280,10 @@
 
 .ui-container .persona .description {
   opacity: 0.75;
-  font-size: smaller;
+  font-size: x-small;
 }
 
 /* ======================= */
-
 .sparkline {
   --high: 100%;
   --thic: 0.1em;
@@ -293,10 +295,8 @@
 }
 
 /* ----------------------- */
-
 .sparkline.sparkgauge {
-  --high: 0.5em;
-  /* height: 100%; */
+  --high: 0.5em; /* height: 100%; */
 }
 
 .sparkline.sparkgauge .grades {
@@ -311,7 +311,7 @@
   flex: 1 1 auto;
   /* width: from JS, style */
   height: 100%;
-  background: var(--c-sub-sub);
+  background: #f7f7f7;
   border-radius: var(--radi);
   /* margin: 0 0.1em 0 0; */
 }
@@ -330,7 +330,6 @@
 }
 
 /* ----------------------- */
-
 .sparkline.sparkruler {
   --high: 1em;
 }
@@ -386,7 +385,6 @@
 }
 
 /* ----------------------- */
-
 .sparkline.sparkhistogram {
   --high: 2em;
 }
@@ -410,8 +408,10 @@
 }
 
 /* ======================= */
-
 .ui-container .control {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
   padding: var(--s-padding);
   display: flex;
   justify-content: space-between;
@@ -428,14 +428,9 @@
 }
 
 /* ======================= */
-
 @media (max-width: 768px) {
   .ui-container {
     border: none;
-  }
-
-  .ui-container .leaves {
-    flex: 0 0 100%;
   }
 
   .ui-container .leaves .content {
