@@ -12,6 +12,7 @@ const STATE_VALIDITY_TIME = 1000 * 60 * 60 * 3;
 // Config
 
 const config = Object.freeze({
+  v: "0.0.0",
   CBD: Object.freeze({
     // How long between two clicks to be part of a burst?
     clickBurstDuration: 400,
@@ -79,7 +80,8 @@ const getConfig = () => config;
 const getDefaultState = () => ({
   leaf: leaf.initData(),
   CBD: CBD.initData(),
-  ui: ui.initData()
+  ui: ui.initData(),
+  v: getConfig().v
 });
 
 let state = (() => {
@@ -88,6 +90,8 @@ let state = (() => {
   // Erase state if it is too old
   if (
     !initialState ||
+    !initialState.v ||
+    initialState.v !== getConfig().v ||
     !initialState.t ||
     initialState.t < Date.now() - STATE_VALIDITY_TIME
   ) {
@@ -166,7 +170,15 @@ const getSegment = () => {
 //========
 // API
 
-window.FSR = { getState: () => state, getCBDs, getSegment, clearState };
+window.DD = {
+  getState: () => state,
+  getConfig,
+  getCBDs,
+  getSegment,
+  clearState,
+  v: () => config.v,
+  version: () => config.v
+};
 
 //========
 
