@@ -60,7 +60,7 @@
 
 .ui-container[visible] {
   transform: translateY(-1 * calc(var(--s-height) + 2 * var(--s-padding)));
-  box-shadow: 0 -0.5em 0.5em -0.3em #62708540;
+  box-shadow: 0 -0.3em 0.5em -0.3em #62708540;
 }
 
 .ui-container .hanger {
@@ -76,7 +76,7 @@
   border-radius: var(--s-bradius) 0 0 0;
   padding: 0.7em 0.4em 0.3em 0.4em;
   background-color: var(--c-secondary);
-  box-shadow: -0.4em -0.4em 0.5em -0.3em #62708540;
+  box-shadow: -0.2em -0.2em 0.5em -0.2em #62708540;
 }
 
 /* ----------------------- */

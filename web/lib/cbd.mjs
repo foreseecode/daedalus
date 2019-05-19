@@ -25,27 +25,35 @@ function getFidelity({ fidelity, fidelityThreshold }, pages) {
     : "∅";
 }
 
-function getRage({ rage, clickBurstThreshold }, mouseData) {
-  // using clicks and moves is hard. Each should have a different
-  // weight in the final decision.
+function getRage(
+  { rage, clickBurstThresholds, scrollBurstThresholds },
+  { pages }
+) {
+  let clickRage = 0;
+  let scrollRage = 0;
 
-  //--------
-  // rage
-  let burstIndex = 0;
-
-  const sumBigBurst = Object.keys(mouseData.clickBursts)
-    // only consider those that occured more than 2 times
-    .reduce(
-      (sum, nbClicks) => sum + mouseData.clickBursts[nbClicks] * nbClicks,
-      0
+  pages.forEach(page => {
+    clickRage = Math.max(
+      clickRage,
+      // nb click bursts in the small section
+      page.mouse.clickBursts[1] / clickBurstThresholds[0],
+      // nb click bursts in the middle section
+      page.mouse.clickBursts[2] / clickBurstThresholds[1],
+      // nb click bursts in the big section
+      page.mouse.clickBursts[3] / clickBurstThresholds[2]
     );
+    scrollRage = Math.max(
+      scrollRage,
+      // nb click bursts in the small section
+      page.mouse.scrollBursts[1] / scrollBurstThresholds[0],
+      // nb click bursts in the middle section
+      page.mouse.scrollBursts[2] / scrollBurstThresholds[1],
+      // nb click bursts in the big section
+      page.mouse.scrollBursts[3] / scrollBurstThresholds[2]
+    );
+  });
 
-  burstIndex = Math.max(
-    0,
-    Math.min(~~(sumBigBurst / clickBurstThreshold) - 1, rage.length - 1)
-  );
-
-  return rage[burstIndex];
+  return rage[Math.max(clickRage, scrollRage, 0)];
 }
 
 //========

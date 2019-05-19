@@ -82,20 +82,14 @@ function renderUIContent({ appConfig, appState }) {
   // Prepare data for mouse click burst
   // Concatenate clickBursts of all pages
   const clickBursts = appState.leaf.pages.reduce((sum, page) => {
-    Object.keys(page.mouse.clickBursts).forEach(nbClicks => {
-      sum[nbClicks] =
-        (sum[nbClicks] || 0) +
-        page.mouse.clickBursts[nbClicks] * (nbClicks * 1 || 1);
+    appConfig.CBD.clickBurstThresholds.forEach((nbClicks, i) => {
+      sum[i] = (sum[i] || 0) + page.mouse.clickBursts[i] * (nbClicks * 1 || 1);
     });
     return sum;
   }, []);
   const nbClicks = appState.leaf.pages.reduce(
     (sum, page) =>
-      sum +
-      Object.values(page.mouse.clickBursts).reduce(
-        (sum, item) => sum + item,
-        0
-      ),
+      sum + page.mouse.clickBursts.reduce((sum, item) => sum + item, 0),
     0
   );
   // Make sure to have a minimum of columns to show
@@ -146,14 +140,14 @@ function renderUIContent({ appConfig, appState }) {
           </div>
         </li>
         <li title="click bursts">
-          <div class="sub">Clicks<span style="float:right">&amp; bursts</span></div>
+          <div class="sub">Clicks<span style="float:right">& bursts</span></div>
           <div class="activity-data">
             <div class="activity-count">${nbClicks}</div>
             <${SparkHistogram} columns=${clickBursts} />
           </div>
         </li>
         <li title="scroll bursts">
-          <div class="sub">Scrolls<span style="float:right">&amp; bursts</span></div>
+          <div class="sub">Scrolls<span style="float:right">& bursts</span></div>
           <div class="activity-data">
             <div class="activity-count">${nbScrolls}</div>
             <${SparkHistogram} columns=${scrollBursts} />

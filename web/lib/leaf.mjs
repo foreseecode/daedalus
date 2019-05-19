@@ -14,8 +14,8 @@ const getANewPage = href =>
       durationOfVisit: []
     }),
     mouse: Object.freeze({
-      clickBursts: {},
-      scrollBursts: {}
+      clickBursts: [],
+      scrollBursts: []
     })
   });
 
@@ -111,7 +111,7 @@ function watchScrolls() {
   const burstThresholds = getConfig().CBD.scrollBurstThresholds;
   let burstTimeout = null;
   // number of scroll in the current burst
-  let burstLength = 0;
+  let burstLength = 1;
 
   let lastScrollTop, lastDirection;
 
@@ -119,9 +119,16 @@ function watchScrolls() {
 
   const burstDetector = e => {
     _thisScrollTop = document.scrollingElement.scrollTop;
-    _thisDirection = lastScrollTop - _thisScrollTop > 0 ? 1 : -1;
-    _hasDirectionChanged =
-      lastScrollTop && lastDirection ? _thisDirection !== lastDirection : true;
+
+    if (lastScrollTop) {
+      _thisDirection = lastScrollTop - _thisScrollTop > 0 ? 1 : -1;
+    }
+
+    if (lastDirection) {
+      _hasDirectionChanged = lastDirection
+        ? _thisDirection !== lastDirection
+        : true;
+    }
 
     console.log({
       lastScrollTop,
@@ -175,10 +182,12 @@ function watchScrolls() {
       saveState();
 
       // cleanup as this burst is over
-      burstTimeout = null;
-      burstLength = 0;
-      lastDirection = null;
+      burstTimeout = 0;
+      burstLength = 1;
+      lastDirection = 0;
       lastScrollTop = null;
+      _thisDirection = 0;
+      _hasDirectionChanged = false;
     }, getConfig().CBD.scrollBurstDuration);
   };
 
