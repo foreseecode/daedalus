@@ -1,6 +1,6 @@
-function getSatisfaction(satisfaction, value) {
-  return satisfaction[value ? 0 : 1];
-  // return satisfaction[~~(Math.random() * 1)];
+function getSatisfaction(sentiment, value) {
+  return sentiment[value ? 0 : 1];
+  // return sentiment[~~(Math.random() * 1)];
 }
 
 function getFidelity({ fidelity, fidelityThreshold }, pages) {
@@ -52,7 +52,7 @@ function getRage({ rage, clickBurstThreshold }, mouseData) {
 
 function initData() {
   return {
-    satisfaction: null,
+    sentiment: null,
     rage: null,
     fidelity: null
   };

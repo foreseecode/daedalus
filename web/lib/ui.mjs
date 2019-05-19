@@ -69,16 +69,21 @@ function renderUIContent({ appConfig, appState }) {
   // ----
   // Prepare data for mouse click burst
   // Concatenate clickBursts of all pages
-  const clickBursts = appState.leaf.pages.reduce((sum, p) => {
-    Object.keys(p.mouse.clickBursts).forEach(nbClicks => {
+  const clickBursts = appState.leaf.pages.reduce((sum, page) => {
+    Object.keys(page.mouse.clickBursts).forEach(nbClicks => {
       sum[nbClicks] =
         (sum[nbClicks] || 0) +
-        p.mouse.clickBursts[nbClicks] * (nbClicks * 1 || 1);
+        page.mouse.clickBursts[nbClicks] * (nbClicks * 1 || 1);
     });
     return sum;
-  }, {});
-  const nbClicks = Object.values(clickBursts).reduce(
-    (sum, item) => sum + item,
+  }, []);
+  const nbClicks = appState.leaf.pages.reduce(
+    (sum, page) =>
+      sum +
+      Object.values(page.mouse.clickBursts).reduce(
+        (sum, item) => sum + item,
+        0
+      ),
     0
   );
   // Make sure to have a minimum of columns to show
@@ -88,16 +93,14 @@ function renderUIContent({ appConfig, appState }) {
   // ----
   // Prepare data for mouse click burst
   // Concatenate scrollBursts of all pages
-  const scrollBursts = appState.leaf.pages.reduce((sum, p) => {
-    Object.keys(p.mouse.scrollBursts).forEach(nbScrolls => {
-      sum[nbScrolls] = (sum[nbScrolls] || 0) + p.mouse.scrollBursts[nbScrolls];
+  const scrollBursts = appState.leaf.pages.reduce((sum, page) => {
+    Object.keys(page.mouse.scrollBursts).forEach(nbScrolls => {
+      sum[nbScrolls] =
+        (sum[nbScrolls] || 0) + page.mouse.scrollBursts[nbScrolls];
     });
     return sum;
-  }, {});
-  const nbScrolls = Object.values(scrollBursts).reduce(
-    (sum, item) => sum + item,
-    0
-  );
+  }, []);
+  const nbScrolls = scrollBursts.reduce((sum, item) => sum + item, 0);
   // Make sure to have a minimum of columns to show
   for (let i = 0; i < 3; i++) scrollBursts[i] = scrollBursts[i] || 0;
   // ----
@@ -107,7 +110,7 @@ function renderUIContent({ appConfig, appState }) {
     <div class="leaves">
       <div class="title">
         <div class="number"><div>1</div></div>
-        <div>Activity</div>
+        <div>User Activity</div>
       </div>
 
       <ul class="content">
@@ -170,7 +173,15 @@ function renderUIContent({ appConfig, appState }) {
                 (c == appState.CBD["rage"] ? " active" : "")}>${c}</span>`
           )}</div>
         </div>
-      </div>
+        <div>
+          <div class="sub" style="margin-left: 0.5em;">Sentiment</div>
+          <div class="cbd-list">
+            <span class="cbd-value"><img class="avatar" src="asset/emoji-happy.svg" /></span>
+            <span class="cbd-value"><img class="avatar" src="asset/emoji-neutral.svg" /></span>
+            <span class="cbd-value"><img class="avatar" src="asset/emoji-sad.svg" /></span>
+          </div>
+        </div>
+        </div>
     </div>
 
     <div class="personas">
@@ -180,18 +191,23 @@ function renderUIContent({ appConfig, appState }) {
       </div>
 
       <div class="content">
-        ${Object.keys(appConfig.segmentsOfInterest).map(
+        ${Object.keys(appConfig.personasOfInterest).map(
           title =>
             h`<span
                 class=${`persona ${title === appState.persona ? "active" : ""}`}
               >
-              <img class="icon" src="asset/user.svg" />
+              <img class="avatar" src="asset/avatar.svg" />
               <div>
                 <div class="title">${title}</div>
                 <div class="description">
-                  ${Object.values(appConfig.segmentsOfInterest[title]).join(
-                    ", "
-                  )}
+                  ${
+                    // use _description if available, otherwise compile the definition
+                    appConfig.personasOfInterest[title]._description
+                      ? appConfig.personasOfInterest[title]._description
+                      : Object.values(appConfig.personasOfInterest[title])
+                          .filter(cbd => !/^_/.test(cbd))
+                          .join(", ")
+                  }
                 </div>
               </div>
             </span>`

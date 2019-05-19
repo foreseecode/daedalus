@@ -26,6 +26,8 @@ const config = Object.freeze({
     // And so on...
     rage: ["normal", "sparse", "rage"],
 
+    // ========
+
     // How long between scroll direction changes to be part of a burst?
     scrollBurstDuration: 400,
     // similar to clickBursts, about scroll direction changes
@@ -36,22 +38,33 @@ const config = Object.freeze({
     // associated w
     fidelity: ["first time", "occasional", "superfan"],
 
-    satisfaction: ["toxic", "neutral"]
+    // ========
+
+    sentiment: ["positive", "neutral", "negative"]
   }),
 
   // Possible personas to fit
-  segmentsOfInterest: {
-    sloth: {
-      fidelity: "occasional",
+  personasOfInterest: {
+    "Bad impression": {
+      fidelity: "first time",
+      rage: "sparse"
+    },
+    "Bad impression": {
+      fidelity: "first time",
+      rage: "rage"
+    },
+    Tranquil: {
+      fidelity: "first time",
       rage: "calm"
     },
-    tranquil: {
+    Tranquil: {
       fidelity: "regular",
       rage: "calm"
     },
-    hardcore: {
+    Promoter: {
+      _description: "Happy Superfan",
       fidelity: "fan",
-      rage: "hectic"
+      rage: "normal"
     }
   },
 
@@ -128,10 +141,10 @@ const getCBDs = () => {
         return sum;
       }, {})
     }),
-    satisfaction: null
+    sentiment: null
     // CBD.getSatisfaction(
-    //   state.satisfaction,
-    //   config.CBD.satisfaction
+    //   state.sentiment,
+    //   config.CBD.sentiment
     // )
   };
 
@@ -140,8 +153,8 @@ const getCBDs = () => {
 
 const getSegment = () => {
   state.persona =
-    Object.keys(config.segmentsOfInterest).find(segmentTitle => {
-      const persona = config.segmentsOfInterest[segmentTitle];
+    Object.keys(config.personasOfInterest).find(segmentTitle => {
+      const persona = config.personasOfInterest[segmentTitle];
       return Object.keys(persona).every(
         CBDName => persona[CBDName] == state.CBD[CBDName]
       );
@@ -205,7 +218,7 @@ leaf.init(
 // const text = document.getElementById("fsrTextarea").value;
 // const toxicity = await getToxicity(text);
 
-// state.satisfaction = toxicity.some(el => el.results[0].match);
+// state.sentiment = toxicity.some(el => el.results[0].match);
 // saveState();
 // renderUI();
 // });
