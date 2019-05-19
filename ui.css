@@ -6,7 +6,7 @@
   --s-bradius: 0.75em;
   --s-bradius2: 1.5em;
   --t-transition: 150ms;
-  --s-height: 43em;
+  --s-height: 35em;
   --s-padding: 0.5em;
 }
 
@@ -39,7 +39,7 @@
   position: fixed;
   width: 100%;
   max-width: 64em;
-  height: calc(var(--s-height));
+  height: var(--s-height);
   bottom: 0em;
   right: 0;
   transform: translateY(var(--s-height));
@@ -176,9 +176,9 @@
 
 /* ----------------------- */
 .ui-container .leaves .content {
-  display: flex;
-  flex-flow: column wrap;
-  flex: 1 1 auto;
+  /* display: flex; */
+  /* flex-flow: column wrap; */
+  /* flex: 1 1 auto; */
   align-items: center;
 }
 
@@ -197,15 +197,20 @@
 /* ----------------------- */
 .ui-container .cbds .cbd-list {
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row nowrap;
+  overflow: hidden;
+  box-shadow: inset -0.3em 0 0.3em 0em white, inset 0.3em 0 0.3em 0em white;
+  padding: 0 .5em;
 }
 
 .ui-container .cbds .cbd-list .cbd-value {
+  flex: 1 0 auto;
   border: 0.1em solid var(--c-sub);
   border-radius: var(--s-bradius);
   padding: 0.5em;
   margin: 0.25em;
   text-transform: capitalize;
+  z-index: -1;
 }
 
 .ui-container .cbds .cbd-list .cbd-value .avatar {
@@ -357,7 +362,7 @@
 }
 
 /* note: last child is the marker */
-.sparkline.sparkruler .grade:not(:nth-child(-1)) {
+.sparkline.sparkruler .grade:not(:last-child) {
   border-right: var(--thic) solid var(--c-secondary);
 }
 
@@ -416,6 +421,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-top: 0.1em solid var(--c-sub-sub);
 }
 
 .ui-container .control button.clear {
