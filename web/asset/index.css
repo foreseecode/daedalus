@@ -229,6 +229,7 @@ label {
   letter-spacing: 1.5px;
   font-weight: 300;
   margin-bottom: 0;
+  text-align: center;
 }
 input {
   background: #ffffff;
