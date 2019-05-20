@@ -31,7 +31,7 @@ const config = Object.freeze({
     // rage[0] is on.
     // If any reaches twice the threshold, the "rage" will be rage[1].
     // And so on...
-    rage: ["normal", "sparse", "rage"],
+    rage: ["calm", "sparse", "rage"],
 
     // ========
 
@@ -47,27 +47,41 @@ const config = Object.freeze({
 
   // Possible personas to fit
   personasOfInterest: {
-    Tranquil: {
-      fidelity: "first time",
-      rage: "calm"
-    },
-    Tranquil: {
-      fidelity: "regular",
-      rage: "calm"
-    },
-    "Bad impression": {
-      fidelity: "first time",
-      rage: "sparse"
-    },
-    "Bad impression": {
-      fidelity: "first time",
-      rage: "rage"
-    },
-    Promoter: {
-      _description: "Happy Superfan",
-      fidelity: "fan",
-      rage: "normal"
-    }
+    Tranquil: [
+      {
+        _description: "Regular Visitor",
+        fidelity: "first time",
+        rage: "calm"
+      },
+      {
+        fidelity: "occasional",
+        rage: "calm"
+      }
+    ],
+
+    "Bad impression": [
+      {
+        _description: "Unsuccessful",
+        fidelity: "first time",
+        rage: "sparse"
+      },
+      {
+        fidelity: "occasional",
+        rage: "sparse"
+      },
+      {
+        fidelity: "first time",
+        rage: "rage"
+      }
+    ],
+
+    Promoter: [
+      {
+        _description: "Happy Superfan",
+        fidelity: "fan",
+        rage: "calm"
+      }
+    ]
   },
 
   ui: { visible: true }
@@ -117,7 +131,7 @@ const saveState = () => {
   };
 
   getCBDs();
-  getSegment();
+  getPersona();
 
   localStorage.setItem("daedalus", JSON.stringify(state));
 
@@ -132,7 +146,7 @@ const clearState = () => {
 };
 
 //========
-// Segment
+// Persona
 
 const getCBDs = () => {
   // Customer Based Dimensions
@@ -149,12 +163,14 @@ const getCBDs = () => {
   return state.CDB;
 };
 
-const getSegment = () => {
+const getPersona = () => {
   state.persona =
-    Object.keys(config.personasOfInterest).find(segmentTitle => {
-      const persona = config.personasOfInterest[segmentTitle];
-      return Object.keys(persona).every(
-        CBDName => persona[CBDName] == state.CBD[CBDName]
+    Object.keys(config.personasOfInterest).find(personaTitle => {
+      const profiles = config.personasOfInterest[personaTitle];
+      return profiles.some(profile =>
+        Object.keys(profile)
+          .filter(k => !k.startsWith("_"))
+          .every(CBDName => profile[CBDName] == state.CBD[CBDName])
       );
     }) || "∅";
 
@@ -168,7 +184,7 @@ window.DD = {
   getState: () => state,
   getConfig,
   getCBDs,
-  getSegment,
+  getPersona,
   clearState,
   v: () => config.v,
   version: () => config.v
@@ -177,7 +193,7 @@ window.DD = {
 //========
 
 // window.addEventListener("unload", () => {
-//   POSTSegments(getSegment());
+//   POSTSegments(getPersona());
 // });
 
 function POSTSegments(personas) {

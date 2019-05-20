@@ -208,9 +208,9 @@ function renderUIContent({ appConfig, appState }) {
                 <div class="description">
                   ${
                     // use _description if available, otherwise compile the definition
-                    appConfig.personasOfInterest[title]._description
-                      ? appConfig.personasOfInterest[title]._description
-                      : Object.values(appConfig.personasOfInterest[title])
+                    appConfig.personasOfInterest[title][0]._description
+                      ? appConfig.personasOfInterest[title][0]._description
+                      : Object.values(appConfig.personasOfInterest[title][0])
                           .filter(cbd => !/^_/.test(cbd))
                           .join(", ")
                   }
