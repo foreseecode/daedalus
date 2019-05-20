@@ -445,9 +445,31 @@ body,
 
 textarea#sentiment-input {
   margin: 0.5em auto;
-  border: 0.1em solid var(--c-sub);
-  border-radius: var(--s-bradius);
+  border: 0.05em solid var(--c-sub);
+  /* border-radius: var(--s-bradius); */
   font-size: large;
+  background-image: linear-gradient(#fafafa 0.1em, transparent 0.1em);
+  line-height: 1.2em;
+  background-size: 100% 1.2em;
+  transition: all 0.3s ease-in;
+}
+
+textarea#sentiment-input.working {
+  outline-color: var(--c-accent);
+  border-color: var(--c-accent);
+}
+textarea#sentiment-input.negative {
+}
+textarea#sentiment-input.neutral:after {
+  content: "😀";
+  display: block;
+  position: absolute;
+  width: 1em;
+  height: 1em;
+  bottom: 0;
+  right: 0;
+}
+textarea#sentiment-input.positive {
 }
 
 #sentiment-input-label {
