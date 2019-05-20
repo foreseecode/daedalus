@@ -36,6 +36,8 @@
     <link rel="stylesheet" type="text/css" href="asset/index.css" />
     <script type="text/javascript" src="asset/index.js" defer></script>
 
+    <script type="text/javascript" src="lib/tensorflow/tf.min.js"></script>
+
     <link rel="stylesheet" type="text/css" href="ui.css" />
     <script src="lib/main.mjs" type="module"></script>
   </head>
@@ -182,7 +184,7 @@
     <!-- START NEW PAGE -->
 
     <label
-      for="textinput"
+      for="sentiment-input"
       id="hs_cos_wrapper_raw_html"
       class="hs_cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_type_raw_html"
       data-hs-cos-general-type="widget"
@@ -199,19 +201,17 @@
             </h2>
           </div>
         </div>
-        <div class="row">
-          <div class="col-12">
-            <h6 style="color: var(--c-accent); margin: 1em ;">
-              Tell us how you feel about this:
-              <textarea
-                id="textinput"
-                cols="33"
-                rows="5"
-                style=" margin: .5em;"
-                autofocus
-              ></textarea>
-            </h6>
-          </div>
+
+        <div class="row" style="text-align: center">
+          <label for="sentiment-input" id="sentiment-input-label">
+            Tell us how you feel about this:
+          </label>
+          <textarea
+            id="sentiment-input"
+            cols="33"
+            rows="5"
+            onkeydown="DD.getSentiment(event)"
+          ></textarea>
         </div>
       </div>
     </label>

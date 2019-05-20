@@ -1,8 +1,3 @@
-function getSatisfaction(sentiment, value) {
-  return sentiment[value ? 0 : 1];
-  // return sentiment[~~(Math.random() * 1)];
-}
-
 function getFidelity({ fidelity, fidelityThreshold }, pages) {
   // [{
   //   href: location.href,
@@ -68,4 +63,4 @@ function initData() {
 
 //========
 
-export { initData, getSatisfaction, getFidelity, getRage };
+export { initData, getFidelity, getRage };

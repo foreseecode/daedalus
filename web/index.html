@@ -36,11 +36,7 @@
     <link rel="stylesheet" type="text/css" href="asset/index.css" />
     <script type="text/javascript" src="asset/index.js" defer></script>
 
-    <script
-      type="text/javascript"
-      src="lib/tensorflow/tf.min.js"
-      async
-    ></script>
+    <script type="text/javascript" src="lib/tensorflow/tf.min.js"></script>
 
     <link rel="stylesheet" type="text/css" href="ui.css" />
     <script type="module" src="lib/main.mjs"></script>
@@ -382,6 +378,18 @@
         </div>
       </div></span
     >
+
+    <div style="text-align: center">
+      <label for="sentiment-input" id="sentiment-input-label">
+        Tell us how you feel about this:
+      </label>
+      <textarea
+        id="sentiment-input"
+        cols="33"
+        rows="5"
+        onkeydown="DD.getSentiment(event)"
+      ></textarea>
+    </div>
 
     <!-- END NEW PAGE -->
 

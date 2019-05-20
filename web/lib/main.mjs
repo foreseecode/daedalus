@@ -1,8 +1,8 @@
 import * as leaf from "./leaf.mjs";
 import * as CBD from "./cbd.mjs";
-// import * as sentiment from "./tensorflow/sentiment.mjs";
-
+import { getSentiment } from "./tensorflow/sentiment.mjs";
 import * as ui from "./ui.mjs";
+import { getCurrentPage } from "./leaf.mjs";
 
 const renderUI = () => ui.update(config, state);
 
@@ -42,7 +42,7 @@ const config = Object.freeze({
 
     // ========
 
-    sentiment: ["positive", "neutral", "negative"]
+    sentiment: ["negative", "neutral", "positive"]
   }),
 
   // Possible personas to fit
@@ -153,11 +153,7 @@ const getCBDs = () => {
   state.CBD = {
     fidelity: CBD.getFidelity(config.CBD, state.leaf.pages),
     rage: CBD.getRage(config.CBD, { pages: state.leaf.pages }),
-    sentiment: null
-    // CBD.getSatisfaction(
-    //   state.sentiment,
-    //   config.CBD.sentiment
-    // )
+    sentiment: state.CBD.sentiment
   };
 
   return state.CDB;
@@ -187,8 +183,29 @@ window.DD = {
   getPersona,
   clearState,
   v: () => config.v,
-  version: () => config.v
+  version: () => config.v,
+  getSentiment: debounceTextInput(async e => {
+    const sentiments = await getSentiment(e.target.value);
+    console.warn(sentiments);
+
+    const max = Math.max(...sentiments);
+
+    if (max === sentiments[0])
+      state.CBD.sentiment = getConfig().CBD.sentiment[0];
+    else if (max === sentiments[1])
+      state.CBD.sentiment = getConfig().CBD.sentiment[1];
+    else if (max === sentiments[2])
+      state.CBD.sentiment = getConfig().CBD.sentiment[2];
+  })
 };
+
+function debounceTextInput(fn) {
+  let tID = 0;
+  return e => {
+    clearTimeout(tID);
+    tID = setTimeout(() => fn(e), 500);
+  };
+}
 
 //========
 
@@ -196,24 +213,24 @@ window.DD = {
 //   POSTSegments(getPersona());
 // });
 
-function POSTSegments(personas) {
-  let pp = state.postedSegments;
-  let segmentsToSend = personas.filter(p => !pp.includes(p));
+// function POSTSegments(personas) {
+//   let pp = state.postedSegments;
+//   let segmentsToSend = personas.filter(p => !pp.includes(p));
 
-  if (!segmentsToSend.length) return;
+//   if (!segmentsToSend.length) return;
 
-  segmentsToSend.forEach(p => state.postedSegments.push(p));
-  saveState();
+//   segmentsToSend.forEach(p => state.postedSegments.push(p));
+//   saveState();
 
-  fetch("http://localhost:3005/data", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ persona: personas[0] })
-  });
-}
+//   fetch("http://localhost:3005/data", {
+//     method: "POST",
+//     headers: {
+//       Accept: "application/json",
+//       "Content-Type": "application/json"
+//     },
+//     body: JSON.stringify({ persona: personas[0] })
+//   });
+// }
 
 //========
 

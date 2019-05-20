@@ -1,44 +1,46 @@
 // window.tf is loaded in <script/>
 
+let model, modelMetadata;
+
+(async function init() {
+  model = await tf.loadLayersModel("/lib/tensorflow/data/model_retail.json", {
+    // onProgress: n => {
+    //   console.log(`loadLayersModel progress: ${~~(n * 100)}%`);
+    // }
+  });
+
+  modelMetadata = JSON.parse(
+    await (await fetch("lib/tensorflow/data/model_retail_metadata.json")).text()
+  );
+})();
+
 async function getSentiment(raw = "Keyi is awesome!") {
-  let modelInput = [];
-  let model = {};
+  if (!tf || !model || !modelMetadata) {
+    return console.error(
+      `tf, model, or metadata not ready`,
+      tf,
+      model,
+      modelMetadata
+    );
+  }
 
-  await Promise.all([
-    new Promise(async resolve => {
-      const modelMetadata = JSON.parse(
-        await (await fetch(
-          "lib/tensorflow/data/model_retail_metadata.json"
-        )).text()
-      );
-      modelInput = await prepareInput(raw, modelMetadata);
+  const modelInput = await prepareInput(raw, modelMetadata);
 
-      console.log(raw, modelInput);
-      resolve();
-    }),
+  const predictions = await model
+    .predict(tf.tensor2d(modelInput, [1, 60]))
+    .array();
 
-    new Promise(async resolve => {
-      model = await tf.loadLayersModel(
-        "/lib/tensorflow/data/model_retail.json",
-        {
-          // onProgress: n => {
-          //   console.log(`loadLayersModel progress: ${~~(n * 100)}%`);
-          // }
-        }
-      );
-      resolve();
-    })
-  ]);
-
-  // model.predict(tf.zeros([1, 60])).print();
-
-  model.predict(tf.tensor2d(modelInput, [1, 60]));
-
-  // const predictions = model.classify(sentence);
-  // return predictions;
+  return predictions
+    .reduce(
+      (sum, sentence) => [
+        sum[0] + sentence[0],
+        sum[1] + sentence[1],
+        sum[2] + sentence[2]
+      ],
+      Array(3).fill(0)
+    )
+    .map(n => n / predictions.length);
 }
-
-getSentiment();
 
 // async function getToxicity(sentence = "you suck") {
 //   const threshold = 0.9;
@@ -63,7 +65,10 @@ async function prepareInput(raw, metadata) {
     });
 
     // Break into sentences
-    input.sentences = raw.split(/\.|\n/);
+    input.sentences = raw
+      .split(/\.|\n/)
+      // make sure everything is less than 60 charachter long
+      .reduce((sum, sentence) => sum.concat(sentence.match(/.{1,60}/g)), []);
 
     // Tokenize, break up the sentences
     input.tokens = input.sentences.map(sentence => {
