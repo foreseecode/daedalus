@@ -149,7 +149,7 @@ function watchScrolls() {
       // check for dead zone
       if (burstLength < burstThresholds[0]) {
         _burstIndex = 0;
-      } else if (burstLength > burstThresholds[burstThresholds.length - 1]) {
+      } else if (burstLength >= burstThresholds[burstThresholds.length - 1]) {
         // check if it's after the last threshold
         _burstIndex = burstThresholds.length - 1;
       } else {
