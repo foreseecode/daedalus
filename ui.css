@@ -10,6 +10,7 @@
   --s-padding: 0.5em;
 }
 
+body,
 .ui-container.theme-a {
   --c-main: #333;
   --c-sub: #c0c0c0;
@@ -199,7 +200,7 @@
   flex-flow: row nowrap;
   overflow: hidden;
   box-shadow: inset -0.3em 0 0.3em 0em white, inset 0.3em 0 0.3em 0em white;
-  padding: 0 .5em;
+  padding: 0 0.5em;
 }
 
 .ui-container .cbds .cbd-list .cbd-value {

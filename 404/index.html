@@ -34,7 +34,7 @@
     <script type="text/javascript" src="asset/velocity.js"></script>
 
     <link rel="stylesheet" type="text/css" href="asset/index.css" />
-    <script type="text/javascript" src="asset/index.js"></script>
+    <script type="text/javascript" src="asset/index.js" defer></script>
 
     <link rel="stylesheet" type="text/css" href="ui.css" />
     <script src="lib/main.mjs" type="module"></script>
@@ -181,16 +181,14 @@
 
     <!-- START NEW PAGE -->
 
-    <span
+    <label
+      for="textinput"
       id="hs_cos_wrapper_raw_html"
       class="hs_cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_type_raw_html"
-      style=""
       data-hs-cos-general-type="widget"
       data-hs-cos-type="raw_html"
-      ><div
-        style="height:1px; width:100%;background:#e3e3e3;margin-bottom:40px;"
-      ></div>
-      <div class="container" style="text-align:center;padding:20px 0 80px 0;">
+    >
+      <div class="container" style="text-align:center;">
         <div class="row">
           <div class="col-12">
             <h1 style="font-size:90px;">404</h1>
@@ -201,8 +199,22 @@
             </h2>
           </div>
         </div>
-      </div></span
-    >
+        <div class="row">
+          <div class="col-12">
+            <h6 style="color: var(--c-accent); margin: 1em ;">
+              Tell us how you feel about this:
+              <textarea
+                id="textinput"
+                cols="33"
+                rows="5"
+                style=" margin: .5em;"
+                autofocus
+              ></textarea>
+            </h6>
+          </div>
+        </div>
+      </div>
+    </label>
 
     <!-- END NEW PAGE -->
 
