@@ -458,7 +458,7 @@ textarea#sentiment-input.working {
   outline-color: var(--c-accent);
   border-color: var(--c-accent);
 }
-textarea#sentiment-input.negative {
+/* textarea#sentiment-input.negative {
 }
 textarea#sentiment-input.neutral:after {
   content: "😀";
@@ -470,7 +470,7 @@ textarea#sentiment-input.neutral:after {
   right: 0;
 }
 textarea#sentiment-input.positive {
-}
+} */
 
 #sentiment-input-label {
   color: var(--c-accent);
