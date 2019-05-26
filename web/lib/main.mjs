@@ -1,9 +1,10 @@
 import * as leaf from "./leaf.mjs";
 import * as CBD from "./cbd.mjs";
 import { getSentiment } from "./tensorflow/sentiment.mjs";
-import * as ui from "./ui.mjs";
+import * as ui from "./ui/ui.mjs";
 import { getCurrentPage } from "./leaf.mjs";
 
+(async function DaedalusApplication() {
 const renderUI = () => ui.update(config, state);
 
 const STATE_VALIDITY_TIME = 1000 * 60 * 60 * 3;
@@ -125,7 +126,7 @@ let state = (() => {
 const saveState = () => {
   // make sure that the state contains at least the defaults before saving
   state = {
-    ...getDefaultState,
+      ...getDefaultState(),
     ...state,
     t: Date.now()
   };
@@ -273,3 +274,4 @@ leaf.init(
 //========
 
 renderUI();
+})();
