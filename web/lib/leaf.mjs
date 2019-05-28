@@ -195,11 +195,9 @@ function watchScrolls() {
 }
 
 //========
-// metaData
-
-function setMetaData({ mongodbClient, userObj }) {
-  return { device: mongodbClient.auth.device, geo: userObj };
-}
+// metadata
+// todo
+// function setMetaData({ mongodbClient, geo }) {}
 
 //========
 
@@ -224,7 +222,7 @@ function init(config, state) {
 function initData() {
   return {
     pages: [getANewPage(location.href)],
-    metaData: {}
+    metadata: {}
   };
 }
 

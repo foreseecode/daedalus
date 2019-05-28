@@ -78,7 +78,7 @@ function renderUIContent({ appConfig, appState }) {
 
     <${leaf} config=${appConfig.CBD} state=${appState.leaf} />
 
-    <${cbd} config=${appConfig.CBD} state=${appState.leaf} />
+    <${cbd} config=${appConfig.CBD} state=${appState.CBD} />
 
     <div class="personas">
       <div class="title">

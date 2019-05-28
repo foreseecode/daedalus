@@ -12,11 +12,9 @@ class leaf extends Component {
 
   render(props, state) {
     const leafState = props.state;
-    const CBDConfig = props.config;
+    leafState.metadata = leafState.metadata || {};
 
-    // todo
-    // leafState.metaData.geo
-    // leafState.metaData.device
+    const CBDConfig = props.config;
 
     // ----
     // Prepare data for page views
@@ -89,18 +87,37 @@ class leaf extends Component {
             />
           </div>
         </li>
-        <li title="click bursts">
+
+        <li class="click" title="click bursts">
           <div class="sub">Clicks<span style="float:right">& bursts</span></div>
           <div class="activity-data">
             <div class="activity-count">${nbClicks}</div>
             <${SparkHistogram} columns=${clickBursts} />
           </div>
         </li>
-        <li title="scroll bursts">
+
+        <li class="scroll" title="scroll bursts">
           <div class="sub">Scrolls<span style="float:right">& bursts</span></div>
           <div class="activity-data">
             <div class="activity-count">${nbScrolls}</div>
             <${SparkHistogram} columns=${scrollBursts} />
+          </div>
+        </li>
+
+        <li class="meta" title="metadata">
+          <div class="sub">Metadata</div>
+          <div class="activity-data">
+            ${leafState.metadata.geo &&
+              h`<div class="platform">${[
+                leafState.metadata.device.platform,
+                leafState.metadata.device.platformVersion
+              ].join(", ")}</div>`}
+            ${leafState.metadata.geo &&
+              h`<div class="country">${[
+                leafState.metadata.geo.city,
+                leafState.metadata.geo.zip,
+                leafState.metadata.geo.country_code
+              ].join(", ")}</div>`}
           </div>
         </li>
       </ul>
