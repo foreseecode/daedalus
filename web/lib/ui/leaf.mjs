@@ -12,8 +12,6 @@ class leaf extends Component {
 
   render(props, state) {
     const leafState = props.state;
-    leafState.metadata = leafState.metadata || {};
-
     const CBDConfig = props.config;
 
     // ----
@@ -107,17 +105,11 @@ class leaf extends Component {
         <li class="meta" title="metadata">
           <div class="sub">Metadata</div>
           <div class="activity-data">
-            ${leafState.metadata.geo &&
+            ${leafState.metadata.device &&
               h`<div class="platform">${[
                 leafState.metadata.device.platform,
                 leafState.metadata.device.platformVersion
-              ].join(", ")}</div>`}
-            ${leafState.metadata.geo &&
-              h`<div class="country">${[
-                leafState.metadata.geo.city,
-                leafState.metadata.geo.zip,
-                leafState.metadata.geo.country_code
-              ].join(", ")}</div>`}
+              ].join(" ")}</div>`}
           </div>
         </li>
       </ul>
