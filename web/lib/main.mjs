@@ -80,7 +80,7 @@ import * as mongodb from "./mongodb.mjs";
       Promoter: [
         {
           _description: "Happy Superfan",
-          fidelity: "fan",
+          fidelity: "superfan",
           rage: "calm"
         }
       ]
